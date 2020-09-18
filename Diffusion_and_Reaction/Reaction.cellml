@@ -1,0 +1,168 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<model xmlns="http://www.cellml.org/cellml/1.1#" xmlns:cmeta="http://www.cellml.org/metadata/1.0#" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:bqs="http://www.cellml.org/bqs/1.0#" xmlns:semsim="http://www.bhi.washington.edu/SemSim#" xmlns:dcterms="http://purl.org/dc/terms/" xmlns:vCard="http://www.w3.org/2001/vcard-rdf/3.0#" name="Reaction" cmeta:id="metaid0">
+  <units name="per_m">
+    <unit exponent="-1.0" units="metre" />
+  </units>
+  <units name="J_per_mol_K">
+    <unit exponent="-1.0" units="kelvin" />
+    <unit exponent="-1.0" units="mole" />
+    <unit units="joule" />
+  </units>
+  <units name="J_per_mol">
+    <unit units="joule" />
+    <unit exponent="-1.0" units="mole" />
+  </units>
+  <units name="mol_per_m3_s">
+    <unit units="mole" />
+    <unit exponent="-3.0" units="metre" />
+    <unit exponent="-1.0" units="second" />
+  </units>
+  <units name="mol_per_m3">
+    <unit exponent="-3.0" units="metre" />
+    <unit units="mole" />
+  </units>
+  <units name="C_per_mol">
+    <unit units="coulomb" />
+    <unit exponent="-1.0" units="mole" />
+  </units>
+  <units name="mol_per_s">
+    <unit units="mole" />
+    <unit exponent="-1.0" units="second" />
+  </units>
+  <component name="react">
+    <variable cmeta:id="react.t" name="t" units="second" />
+    <variable cmeta:id="react.q_A" initial_value="1" name="q_A" units="mol_per_m3" />
+    <variable cmeta:id="react.q_B" initial_value="0.5" name="q_B" units="mol_per_m3" />
+    <variable cmeta:id="react.q_C" initial_value="0" name="q_C" units="mol_per_m3" />
+    <variable cmeta:id="react.stoi_A" initial_value="2" name="stoi_A" units="dimensionless" />
+    <variable cmeta:id="react.stoi_B" initial_value="3" name="stoi_B" units="dimensionless" />
+    <variable cmeta:id="react.stoi_C" initial_value="1" name="stoi_C" units="dimensionless" />
+    <variable cmeta:id="react.v" name="v" units="mol_per_s" />
+    <variable cmeta:id="react.K_A" initial_value="20" name="K_A" units="per_m" />
+    <variable cmeta:id="react.K_B" initial_value="30" name="K_B" units="per_m" />
+    <variable cmeta:id="react.K_C" initial_value="40" name="K_C" units="per_m" />
+    <variable cmeta:id="react.Kappa" initial_value="0.001" name="Kappa" units="mol_per_m3_s" />
+    <variable cmeta:id="react.R" initial_value="8.314" name="R" units="J_per_mol_K" />
+    <variable cmeta:id="react.T" initial_value="300" name="T" units="kelvin" />
+    <variable cmeta:id="react.F" initial_value="96485" name="F" units="C_per_mol" />
+  </component>
+  <rdf:RDF xmlns:bqmodel="http://biomodels.net/model-qualifiers/" xmlns:bqbiol="http://biomodels.net/biology-qualifiers/" xmlns:ro="http://www.obofoundry.org/ro/ro.owl#" xmlns:opb="http://bhi.washington.edu/OPB#">
+    <rdf:Description rdf:about="#react.R">
+      <bqbiol:is rdf:resource="https://identifiers.org/opb/OPB_00410" />
+    </rdf:Description>
+    <rdf:Description rdf:about="#react.stoi_A">
+      <semsim:isComputationalComponentFor>
+        <rdf:Description rdf:about="#property_3">
+          <semsim:physicalPropertyOf>
+            <rdf:Description rdf:about="#entity_0">
+              <ro:part_of>
+                <rdf:Description rdf:about="#entity_1">
+                  <semsim:hasPhysicalDefinition rdf:resource="http://identifiers.org/fma/FMA:226050" />
+                </rdf:Description>
+              </ro:part_of>
+              <semsim:hasPhysicalDefinition rdf:resource="https://identifiers.org/chebi/CHEBI:35780" />
+            </rdf:Description>
+          </semsim:physicalPropertyOf>
+          <semsim:hasPhysicalDefinition rdf:resource="https://identifiers.org/opb/OPB_00425" />
+        </rdf:Description>
+      </semsim:isComputationalComponentFor>
+    </rdf:Description>
+    <rdf:Description rdf:about="#react.F">
+      <bqbiol:is rdf:resource="https://identifiers.org/opb/OPB_00089" />
+    </rdf:Description>
+    <rdf:Description rdf:about="#react.K_B">
+      <semsim:isComputationalComponentFor>
+        <rdf:Description rdf:about="#property_7">
+          <semsim:physicalPropertyOf>
+            <rdf:Description rdf:about="#entity_2">
+              <ro:part_of rdf:resource="#entity_1" />
+              <semsim:hasPhysicalDefinition rdf:resource="https://identifiers.org/chebi/CHEBI:39123" />
+            </rdf:Description>
+          </semsim:physicalPropertyOf>
+          <semsim:hasPhysicalDefinition rdf:resource="https://identifiers.org/opb/OPB_00340" />
+        </rdf:Description>
+      </semsim:isComputationalComponentFor>
+      <dcterms:description>thermodynamic constant</dcterms:description>
+    </rdf:Description>
+    <rdf:Description rdf:about="#metaid0" semsim:modelName="Reaction" />
+    <rdf:Description rdf:about="#react.stoi_C">
+      <semsim:isComputationalComponentFor>
+        <rdf:Description rdf:about="#property_5">
+          <semsim:physicalPropertyOf>
+            <rdf:Description rdf:about="#entity_3">
+              <ro:part_of rdf:resource="#entity_1" />
+              <semsim:hasPhysicalDefinition rdf:resource="https://identifiers.org/chebi/CHEBI:9679" />
+            </rdf:Description>
+          </semsim:physicalPropertyOf>
+          <semsim:hasPhysicalDefinition rdf:resource="https://identifiers.org/opb/OPB_00425" />
+        </rdf:Description>
+      </semsim:isComputationalComponentFor>
+    </rdf:Description>
+    <rdf:Description rdf:about="#react.q_A">
+      <semsim:isComputationalComponentFor>
+        <rdf:Description rdf:about="#property_0">
+          <semsim:physicalPropertyOf rdf:resource="#entity_0" />
+          <semsim:hasPhysicalDefinition rdf:resource="https://identifiers.org/opb/OPB_00340" />
+        </rdf:Description>
+      </semsim:isComputationalComponentFor>
+    </rdf:Description>
+    <rdf:Description rdf:about="#react.q_C">
+      <semsim:isComputationalComponentFor>
+        <rdf:Description rdf:about="#property_2">
+          <semsim:physicalPropertyOf rdf:resource="#entity_3" />
+          <semsim:hasPhysicalDefinition rdf:resource="https://identifiers.org/opb/OPB_00340" />
+        </rdf:Description>
+      </semsim:isComputationalComponentFor>
+    </rdf:Description>
+    <rdf:Description rdf:about="#react.Kappa">
+      <semsim:isComputationalComponentFor>
+        <rdf:Description rdf:about="#property_9">
+          <semsim:physicalPropertyOf>
+            <rdf:Description rdf:about="#entity_4">
+              <semsim:hasPhysicalDefinition rdf:resource="https://identifiers.org/chebi/CHEBI:9679" />
+            </rdf:Description>
+          </semsim:physicalPropertyOf>
+          <semsim:hasPhysicalDefinition rdf:resource="https://identifiers.org/opb/OPB_01296" />
+        </rdf:Description>
+      </semsim:isComputationalComponentFor>
+    </rdf:Description>
+    <rdf:Description rdf:about="#react.stoi_B">
+      <semsim:isComputationalComponentFor>
+        <rdf:Description rdf:about="#property_4">
+          <semsim:physicalPropertyOf rdf:resource="#entity_2" />
+          <semsim:hasPhysicalDefinition rdf:resource="https://identifiers.org/opb/OPB_00425" />
+        </rdf:Description>
+      </semsim:isComputationalComponentFor>
+    </rdf:Description>
+    <rdf:Description rdf:about="#react.K_C">
+      <semsim:isComputationalComponentFor>
+        <rdf:Description rdf:about="#property_8">
+          <semsim:physicalPropertyOf rdf:resource="#entity_3" />
+          <semsim:hasPhysicalDefinition rdf:resource="https://identifiers.org/opb/OPB_00340" />
+        </rdf:Description>
+      </semsim:isComputationalComponentFor>
+      <dcterms:description>thermodynamic constant</dcterms:description>
+    </rdf:Description>
+    <rdf:Description rdf:about="#react.K_A">
+      <semsim:isComputationalComponentFor>
+        <rdf:Description rdf:about="#property_6">
+          <semsim:physicalPropertyOf rdf:resource="#entity_0" />
+          <semsim:hasPhysicalDefinition rdf:resource="https://identifiers.org/opb/OPB_00340" />
+        </rdf:Description>
+      </semsim:isComputationalComponentFor>
+      <dcterms:description>thermodynamic constant</dcterms:description>
+    </rdf:Description>
+    <rdf:Description rdf:about="#react.T">
+      <bqbiol:is rdf:resource="https://identifiers.org/opb/OPB_00293" />
+    </rdf:Description>
+    <rdf:Description rdf:about="#react.q_B">
+      <semsim:isComputationalComponentFor>
+        <rdf:Description rdf:about="#property_1">
+          <semsim:physicalPropertyOf rdf:resource="#entity_2" />
+          <semsim:hasPhysicalDefinition rdf:resource="https://identifiers.org/opb/OPB_00340" />
+        </rdf:Description>
+      </semsim:isComputationalComponentFor>
+    </rdf:Description>
+  </rdf:RDF>
+</model>
+

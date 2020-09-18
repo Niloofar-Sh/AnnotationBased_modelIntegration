@@ -1,0 +1,161 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<model xmlns="http://www.cellml.org/cellml/1.1#" xmlns:cmeta="http://www.cellml.org/metadata/1.0#" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:bqs="http://www.cellml.org/bqs/1.0#" xmlns:semsim="http://www.bhi.washington.edu/SemSim#" xmlns:dcterms="http://purl.org/dc/terms/" xmlns:vCard="http://www.w3.org/2001/vcard-rdf/3.0#" name="Diffusion_vars" cmeta:id="metaid0">
+  <units name="mol_per_m3_s">
+    <unit exponent="-1.0" units="second" />
+    <unit units="mole" />
+    <unit exponent="-3.0" units="metre" />
+  </units>
+  <units name="mol_per_m3">
+    <unit units="mole" />
+    <unit exponent="-3.0" units="metre" />
+  </units>
+  <units name="J_per_mol">
+    <unit units="joule" />
+    <unit exponent="-1.0" units="mole" />
+  </units>
+  <units name="mol_per_s">
+    <unit exponent="-1.0" units="second" />
+    <unit units="mole" />
+  </units>
+  <units name="per_m">
+    <unit exponent="-1.0" units="metre" />
+  </units>
+  <units name="J_per_mol_K">
+    <unit units="joule" />
+    <unit exponent="-1.0" units="mole" />
+    <unit exponent="-1.0" units="kelvin" />
+  </units>
+  <units name="C_per_mol">
+    <unit units="coulomb" />
+    <unit exponent="-1.0" units="mole" />
+  </units>
+  <component name="diff">
+    <variable cmeta:id="diff.t" name="t" units="second" />
+    <variable cmeta:id="diff.q_A" initial_value="1" name="q_A" units="mol_per_m3" />
+    <variable cmeta:id="diff.q_B" initial_value="0" name="q_B" units="mol_per_m3" />
+    <variable cmeta:id="diff.K_A" initial_value="5263.6085" name="K_A" units="per_m" />
+    <variable cmeta:id="diff.K_B" initial_value="5263.6085" name="K_B" units="per_m" />
+    <variable cmeta:id="diff.Kappa" initial_value="0.00019926" name="Kappa" units="mol_per_m3_s" />
+    <variable cmeta:id="diff.R" initial_value="8.314" name="R" units="J_per_mol_K" />
+    <variable cmeta:id="diff.T" initial_value="300" name="T" units="kelvin" />
+    <variable cmeta:id="diff.u" name="u" units="J_per_mol" />
+    <variable cmeta:id="diff.v" name="v" units="mol_per_s" />
+  </component>
+  <rdf:RDF xmlns:bqmodel="http://biomodels.net/model-qualifiers/" xmlns:bqbiol="http://biomodels.net/biology-qualifiers/" xmlns:ro="http://www.obofoundry.org/ro/ro.owl#" xmlns:opb="http://bhi.washington.edu/OPB#">
+    <rdf:Description rdf:about="#diff.u">
+      <semsim:isComputationalComponentFor>
+        <rdf:Description rdf:about="#property_6">
+          <semsim:physicalPropertyOf>
+            <rdf:Description rdf:about="#metaid1">
+              <semsim:hasSinkParticipant>
+                <rdf:Description rdf:about="#sink_0">
+                  <semsim:hasPhysicalEntityReference>
+                    <rdf:Description rdf:about="#entity_2">
+                      <ro:part_of>
+                        <rdf:Description rdf:about="#entity_3">
+                          <semsim:hasPhysicalDefinition rdf:resource="http://identifiers.org/fma/FMA:226050" />
+                        </rdf:Description>
+                      </ro:part_of>
+                      <semsim:hasPhysicalDefinition rdf:resource="https://identifiers.org/chebi/CHEBI:39123" />
+                    </rdf:Description>
+                  </semsim:hasPhysicalEntityReference>
+                </rdf:Description>
+              </semsim:hasSinkParticipant>
+              <semsim:hasSourceParticipant>
+                <rdf:Description rdf:about="#source_0">
+                  <semsim:hasPhysicalEntityReference>
+                    <rdf:Description rdf:about="#entity_0">
+                      <ro:part_of>
+                        <rdf:Description rdf:about="#entity_1">
+                          <semsim:hasPhysicalDefinition rdf:resource="http://identifiers.org/fma/FMA:70022" />
+                        </rdf:Description>
+                      </ro:part_of>
+                      <semsim:hasPhysicalDefinition rdf:resource="https://identifiers.org/chebi/CHEBI:39123" />
+                    </rdf:Description>
+                  </semsim:hasPhysicalEntityReference>
+                </rdf:Description>
+              </semsim:hasSourceParticipant>
+            </rdf:Description>
+          </semsim:physicalPropertyOf>
+          <semsim:hasPhysicalDefinition rdf:resource="https://identifiers.org/opb/OPB_00378" />
+        </rdf:Description>
+      </semsim:isComputationalComponentFor>
+    </rdf:Description>
+    <rdf:Description rdf:about="#diff.T">
+      <semsim:isComputationalComponentFor>
+        <rdf:Description rdf:about="#property_5">
+          <semsim:hasPhysicalDefinition rdf:resource="https://identifiers.org/opb/OPB_00293" />
+        </rdf:Description>
+      </semsim:isComputationalComponentFor>
+    </rdf:Description>
+    <rdf:Description rdf:about="#diff.R">
+      <bqbiol:is rdf:resource="https://identifiers.org/opb/OPB_00410" />
+    </rdf:Description>
+    <rdf:Description rdf:about="#diff.v">
+      <bqbiol:is rdf:resource="https://identifiers.org/opb/OPB_00237" />
+    </rdf:Description>
+    <rdf:Description rdf:about="#diff.t">
+      <bqbiol:is rdf:resource="https://identifiers.org/opb/OPB_01023" />
+    </rdf:Description>
+    <rdf:Description rdf:about="#diff.K_A">
+      <semsim:isComputationalComponentFor>
+        <rdf:Description rdf:about="#property_2">
+          <semsim:physicalPropertyOf rdf:resource="#entity_0" />
+          <semsim:hasPhysicalDefinition rdf:resource="https://identifiers.org/opb/OPB_00340" />
+        </rdf:Description>
+      </semsim:isComputationalComponentFor>
+      <dcterms:description>Thermodynamic constant</dcterms:description>
+    </rdf:Description>
+    <rdf:Description rdf:about="#metaid0" semsim:modelName="Diffusion">
+      <semsim:modelName>Diffusion_vars</semsim:modelName>
+    </rdf:Description>
+    <rdf:Description rdf:about="#diff.Kappa">
+      <semsim:isComputationalComponentFor>
+        <rdf:Description rdf:about="#property_4">
+          <semsim:physicalPropertyOf>
+            <rdf:Description rdf:about="#entity_4">
+              <semsim:hasPhysicalDefinition rdf:resource="https://identifiers.org/chebi/CHEBI:150006" />
+            </rdf:Description>
+          </semsim:physicalPropertyOf>
+          <semsim:hasPhysicalDefinition rdf:resource="https://identifiers.org/opb/OPB_01296" />
+        </rdf:Description>
+      </semsim:isComputationalComponentFor>
+      <bqbiol:is rdf:resource="https://identifiers.org/opb/OPB_01296" />
+    </rdf:Description>
+    <rdf:Description rdf:about="#diff.q_A">
+      <semsim:isComputationalComponentFor>
+        <rdf:Description rdf:about="#property_0">
+          <semsim:physicalPropertyOf rdf:resource="#entity_0" />
+          <semsim:hasPhysicalDefinition rdf:resource="https://identifiers.org/opb/OPB_00340" />
+        </rdf:Description>
+      </semsim:isComputationalComponentFor>
+    </rdf:Description>
+    <rdf:Description rdf:about="#diff.v">
+      <bqbiol:is rdf:resource="https://identifiers.org/opb/OPB_00237" />
+    </rdf:Description>
+    <rdf:Description rdf:about="#diff.t">
+      <bqbiol:is rdf:resource="https://identifiers.org/opb/OPB_01023" />
+    </rdf:Description>
+    <rdf:Description rdf:about="#diff.R">
+      <bqbiol:is rdf:resource="https://identifiers.org/opb/OPB_00410" />
+    </rdf:Description>
+    <rdf:Description rdf:about="#diff.K_B">
+      <semsim:isComputationalComponentFor>
+        <rdf:Description rdf:about="#property_3">
+          <semsim:physicalPropertyOf rdf:resource="#entity_2" />
+          <semsim:hasPhysicalDefinition rdf:resource="https://identifiers.org/opb/OPB_00340" />
+        </rdf:Description>
+      </semsim:isComputationalComponentFor>
+      <dcterms:description>Thermodynamic constant</dcterms:description>
+    </rdf:Description>
+    <rdf:Description rdf:about="#diff.q_B">
+      <semsim:isComputationalComponentFor>
+        <rdf:Description rdf:about="#property_1">
+          <semsim:physicalPropertyOf rdf:resource="#entity_2" />
+          <semsim:hasPhysicalDefinition rdf:resource="https://identifiers.org/opb/OPB_00340" />
+        </rdf:Description>
+      </semsim:isComputationalComponentFor>
+    </rdf:Description>
+  </rdf:RDF>
+</model>
+
