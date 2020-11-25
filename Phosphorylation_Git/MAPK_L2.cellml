@@ -1,332 +1,331 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<model xmlns="http://www.cellml.org/cellml/1.1#" xmlns:cmeta="http://www.cellml.org/metadata/1.0#" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:bqs="http://www.cellml.org/bqs/1.0#" xmlns:semsim="http://www.bhi.washington.edu/SemSim#" xmlns:dcterms="http://purl.org/dc/terms/" xmlns:vCard="http://www.w3.org/2001/vcard-rdf/3.0#" name="MAPK_L2" cmeta:id="metaid0">
-  <units name="mol_per_m3_s">
-    <unit exponent="-3.0" units="metre" />
-    <unit exponent="-1.0" units="second" />
-    <unit units="mole" />
-  </units>
-  <units name="mol_per_s">
-    <unit exponent="-1.0" units="second" />
-    <unit units="mole" />
-  </units>
-  <units name="per_m">
-    <unit exponent="-1.0" units="metre" />
-  </units>
-  <units name="J_per_mol_K">
-    <unit units="joule" />
-    <unit exponent="-1.0" units="mole" />
-    <unit exponent="-1.0" units="kelvin" />
-  </units>
-  <units name="C_per_mol">
-    <unit units="coulomb" />
-    <unit exponent="-1.0" units="mole" />
-  </units>
-  <units name="J_per_mol">
-    <unit exponent="-1.0" units="mole" />
-    <unit units="joule" />
-  </units>
-  <units name="mol_per_m3">
-    <unit exponent="-3.0" units="metre" />
-    <unit units="mole" />
-  </units>
-  <component name="mapk2">
-    <variable cmeta:id="mapk2.MKK" initial_value="0.003" name="MKK" units="mol_per_m3" />
-    <variable cmeta:id="mapk2.MKKP" initial_value="0" name="MKKP" units="mol_per_m3" />
-    <variable cmeta:id="mapk2.C1" initial_value="1e-3" name="C1" units="mol_per_m3" />
-    <variable cmeta:id="mapk2.C2" initial_value="1e-3" name="C2" units="mol_per_m3" />
-    <variable cmeta:id="mapk2.E1" initial_value="0" name="E1" units="mol_per_m3" />
-    <variable cmeta:id="mapk2.E2" initial_value="0.0003" name="E2" units="mol_per_m3" />
-    <variable cmeta:id="mapk2.ATP" initial_value="1" name="ATP" units="mol_per_m3" />
-    <variable cmeta:id="mapk2.ADP" initial_value="1" name="ADP" units="mol_per_m3" />
-    <variable cmeta:id="mapk2.P" initial_value="1" name="P" units="mol_per_m3" />
-    <variable cmeta:id="mapk2.K_MKK" initial_value="1.1" name="K_MKK" units="per_m" />
-    <variable cmeta:id="mapk2.K_MKKP" initial_value="1.15" name="K_MKKP" units="per_m" />
-    <variable cmeta:id="mapk2.K_C1" initial_value="39933509.573638074" name="K_C1" units="per_m" />
-    <variable cmeta:id="mapk2.K_C2" initial_value="39933509.573638074" name="K_C2" units="per_m" />
-    <variable cmeta:id="mapk2.K_E1" initial_value="0" name="K_E1" units="per_m" />
-    <variable cmeta:id="mapk2.K_MKK_Pase" initial_value="1" name="K_MKK_Pase" units="per_m" />
-    <variable cmeta:id="mapk2.K_ATP" initial_value="1" name="K_ATP" units="per_m" />
-    <variable cmeta:id="mapk2.K_ADP" initial_value="1" name="K_ADP" units="per_m" />
-    <variable cmeta:id="mapk2.K_P" initial_value="1" name="K_P" units="per_m" />
-    <variable cmeta:id="mapk2.r1" initial_value="3.7562438563882655e-06" name="r1" units="mol_per_m3_s" />
-    <variable cmeta:id="mapk2.r2" initial_value="3.7562438563882655e-06" name="r2" units="mol_per_m3_s" />
-    <variable cmeta:id="mapk2.r3" initial_value="3.7562438563882655e-06" name="r3" units="mol_per_m3_s" />
-    <variable cmeta:id="mapk2.r4" initial_value="3.7562438563882655e-06" name="r4" units="mol_per_m3_s" />
-    <variable cmeta:id="mapk2.R" initial_value="8.314" name="R" units="J_per_mol_K" />
-    <variable cmeta:id="mapk2.T" initial_value="310" name="T" units="kelvin" />
-  </component>
-  <rdf:RDF xmlns:bqmodel="http://biomodels.net/model-qualifiers/" xmlns:bqbiol="http://biomodels.net/biology-qualifiers/" xmlns:ro="http://www.obofoundry.org/ro/ro.owl#" xmlns:opb="http://bhi.washington.edu/OPB#">
-    <rdf:Description rdf:about="#mapk2.T">
-      <bqbiol:is rdf:resource="https://identifiers.org/opb/OPB_00293" />
-    </rdf:Description>
-    <rdf:Description rdf:about="#mapk2.P">
-      <semsim:isComputationalComponentFor>
-        <rdf:Description rdf:about="#property_8">
-          <semsim:physicalPropertyOf>
-            <rdf:Description rdf:about="#entity_8">
-              <semsim:hasPhysicalDefinition rdf:resource="http://identifiers.org/go/GO:0042301" />
-            </rdf:Description>
-          </semsim:physicalPropertyOf>
-          <semsim:hasPhysicalDefinition rdf:resource="https://identifiers.org/opb/OPB_00340" />
+<?xml version='1.0' encoding='UTF-8'?>
+<model cmeta:id="metaid0" name="MAPK_L2" xmlns="http://www.cellml.org/cellml/1.1#" xmlns:cellml="http://www.cellml.org/cellml/1.1#" xmlns:cmeta="http://www.cellml.org/metadata/1.0#">
+    <units name="J_per_mol">
+        <unit exponent="-1.0" units="mole"/>
+        <unit units="joule"/>
+    </units>
+    <units name="C_per_mol">
+        <unit exponent="-1.0" units="mole"/>
+        <unit units="coulomb"/>
+    </units>
+    <units name="J_per_mol_K">
+        <unit exponent="-1.0" units="kelvin"/>
+        <unit units="joule"/>
+        <unit exponent="-1.0" units="mole"/>
+    </units>
+    <units name="mol_per_s">
+        <unit exponent="-1.0" units="second"/>
+        <unit units="mole"/>
+    </units>
+    <units name="mol_per_m3_s">
+        <unit exponent="-3.0" units="metre"/>
+        <unit exponent="-1.0" units="second"/>
+        <unit units="mole"/>
+    </units>
+    <units name="mol_per_m3">
+        <unit exponent="-3.0" units="metre"/>
+        <unit units="mole"/>
+    </units>
+    <units name="per_m">
+        <unit exponent="-1.0" units="metre"/>
+    </units>
+    <component name="mapk2">
+        <variable cmeta:id="mapk2.MKK" initial_value="1.2" name="MKK" units="mol_per_m3"/>
+        <variable cmeta:id="mapk2.MKKP" initial_value="0" name="MKKP" units="mol_per_m3"/>
+        <variable cmeta:id="mapk2.C1" initial_value="1e-9" name="C1" units="mol_per_m3"/>
+        <variable cmeta:id="mapk2.C2" initial_value="1e-9" name="C2" units="mol_per_m3"/>
+        <variable cmeta:id="mapk2.E1" initial_value="0" name="E1" units="mol_per_m3"/>
+        <variable cmeta:id="mapk2.E2" initial_value="0.0003" name="E2" units="mol_per_m3"/>
+        <variable cmeta:id="mapk2.ATP" initial_value="266223397.1575872" name="ATP" units="mol_per_m3"/>
+        <variable cmeta:id="mapk2.ADP" initial_value="148.4131591025766" name="ADP" units="mol_per_m3"/>
+        <variable cmeta:id="mapk2.P" initial_value="0.00673794699" name="P" units="mol_per_m3"/>
+        <variable cmeta:id="mapk2.K_MKK" initial_value="1" name="K_MKK" units="per_m"/>
+        <variable cmeta:id="mapk2.K_MKKP" initial_value="1" name="K_MKKP" units="per_m"/>
+        <variable cmeta:id="mapk2.K_C1" initial_value="39933509.573638074" name="K_C1" units="per_m"/>
+        <variable cmeta:id="mapk2.K_C2" initial_value="0.15" name="K_C2" units="per_m"/>
+        <variable cmeta:id="mapk2.K_E1" initial_value="1" name="K_E1" units="per_m"/>
+        <variable cmeta:id="mapk2.K_MKK_Pase" initial_value="1" name="K_MKK_Pase" units="per_m"/>
+        <variable cmeta:id="mapk2.K_ATP" initial_value="1" name="K_ATP" units="per_m"/>
+        <variable cmeta:id="mapk2.K_ADP" initial_value="1" name="K_ADP" units="per_m"/>
+        <variable cmeta:id="mapk2.K_P" initial_value="1" name="K_P" units="per_m"/>
+        <variable cmeta:id="mapk2.r1" initial_value="3.7562438563882655e-06" name="r1" units="mol_per_m3_s"/>
+        <variable cmeta:id="mapk2.r2" initial_value="3.7562438563882655e-06" name="r2" units="mol_per_m3_s"/>
+        <variable cmeta:id="mapk2.r3" initial_value="1000" name="r3" units="mol_per_m3_s"/>
+        <variable cmeta:id="mapk2.r4" initial_value="1000" name="r4" units="mol_per_m3_s"/>
+        <variable cmeta:id="mapk2.R" initial_value="1" name="R" units="J_per_mol_K"/>
+        <variable cmeta:id="mapk2.T" initial_value="1" name="T" units="kelvin"/>
+    </component>
+    <rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+        <rdf:Description xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" rdf:about="#mapk2.T">
+            <bqbiol:is xmlns:bqbiol="http://biomodels.net/biology-qualifiers/" rdf:resource="https://identifiers.org/opb/OPB_00293" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"/>
         </rdf:Description>
-      </semsim:isComputationalComponentFor>
-    </rdf:Description>
-    <rdf:Description rdf:about="#mapk2.r1">
-      <semsim:isComputationalComponentFor>
-        <rdf:Description rdf:about="#property_18">
-          <semsim:physicalPropertyOf>
-            <rdf:Description rdf:about="#entity_9">
-              <ro:part_of>
-                <rdf:Description rdf:about="#entity_10">
-                  <ro:part_of>
-                    <rdf:Description rdf:about="#entity_6">
-                      <semsim:hasPhysicalDefinition rdf:resource="http://identifiers.org/go/GO:0005524" />
-                    </rdf:Description>
-                  </ro:part_of>
-                  <semsim:hasPhysicalDefinition rdf:resource="http://identifiers.org/go/GO:0004708" />
+        <rdf:Description xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" rdf:about="#mapk2.P">
+            <semsim:isComputationalComponentFor xmlns:semsim="http://www.bhi.washington.edu/SemSim#">
+                <rdf:Description xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" rdf:about="#property_8">
+                    <semsim:physicalPropertyOf xmlns:semsim="http://www.bhi.washington.edu/SemSim#">
+                        <rdf:Description xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" rdf:about="#entity_8">
+                            <semsim:hasPhysicalDefinition xmlns:semsim="http://www.bhi.washington.edu/SemSim#" rdf:resource="http://identifiers.org/go/GO:0042301" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"/>
+                        </rdf:Description>
+                    </semsim:physicalPropertyOf>
+                    <semsim:hasPhysicalDefinition xmlns:semsim="http://www.bhi.washington.edu/SemSim#" rdf:resource="https://identifiers.org/opb/OPB_00340" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"/>
                 </rdf:Description>
-              </ro:part_of>
-              <semsim:hasPhysicalDefinition rdf:resource="http://identifiers.org/go/GO:0016310" />
-            </rdf:Description>
-          </semsim:physicalPropertyOf>
-          <semsim:hasPhysicalDefinition rdf:resource="https://identifiers.org/opb/OPB_01296" />
+            </semsim:isComputationalComponentFor>
         </rdf:Description>
-      </semsim:isComputationalComponentFor>
-    </rdf:Description>
-    <rdf:Description rdf:about="#mapk2.MKK">
-      <semsim:isComputationalComponentFor>
-        <rdf:Description rdf:about="#property_0">
-          <semsim:physicalPropertyOf>
-            <rdf:Description rdf:about="#entity_0">
-              <semsim:hasPhysicalDefinition rdf:resource="http://identifiers.org/go/GO:0004708" />
-            </rdf:Description>
-          </semsim:physicalPropertyOf>
-          <semsim:hasPhysicalDefinition rdf:resource="https://identifiers.org/opb/OPB_00340" />
-        </rdf:Description>
-      </semsim:isComputationalComponentFor>
-    </rdf:Description>
-    <rdf:Description rdf:about="#mapk2.R">
-      <bqbiol:is rdf:resource="https://identifiers.org/opb/OPB_00410" />
-    </rdf:Description>
-    <rdf:Description rdf:about="#mapk2.K_ATP">
-      <semsim:isComputationalComponentFor>
-        <rdf:Description rdf:about="#property_15">
-          <semsim:physicalPropertyOf rdf:resource="#entity_6" />
-          <semsim:hasPhysicalDefinition rdf:resource="https://identifiers.org/opb/OPB_00340" />
-        </rdf:Description>
-      </semsim:isComputationalComponentFor>
-      <dcterms:description>thermodynamic constant</dcterms:description>
-    </rdf:Description>
-    <rdf:Description rdf:about="#mapk2.K_E1">
-      <semsim:isComputationalComponentFor>
-        <rdf:Description rdf:about="#property_13">
-          <semsim:physicalPropertyOf>
-            <rdf:Description rdf:about="#entity_4">
-              <semsim:hasPhysicalDefinition rdf:resource="http://identifiers.org/go/GO:0000185" />
-            </rdf:Description>
-          </semsim:physicalPropertyOf>
-          <semsim:hasPhysicalDefinition rdf:resource="https://identifiers.org/opb/OPB_00340" />
-        </rdf:Description>
-      </semsim:isComputationalComponentFor>
-      <dcterms:description>thermodynamic constant</dcterms:description>
-    </rdf:Description>
-    <rdf:Description rdf:about="#mapk2.K_C1">
-      <semsim:isComputationalComponentFor>
-        <rdf:Description rdf:about="#property_11">
-          <semsim:physicalPropertyOf>
-            <rdf:Description rdf:about="#entity_2">
-              <semsim:hasPhysicalDefinition rdf:resource="http://identifiers.org/go/GO:0006468" />
-            </rdf:Description>
-          </semsim:physicalPropertyOf>
-          <semsim:hasPhysicalDefinition rdf:resource="https://identifiers.org/opb/OPB_00340" />
-        </rdf:Description>
-      </semsim:isComputationalComponentFor>
-      <dcterms:description>thermodynamic constant</dcterms:description>
-    </rdf:Description>
-    <rdf:Description rdf:about="#mapk2.K_C2">
-      <semsim:isComputationalComponentFor>
-        <rdf:Description rdf:about="#property_12">
-          <semsim:physicalPropertyOf>
-            <rdf:Description rdf:about="#entity_3">
-              <semsim:hasPhysicalDefinition rdf:resource="http://identifiers.org/go/GO:0006470" />
-            </rdf:Description>
-          </semsim:physicalPropertyOf>
-          <semsim:hasPhysicalDefinition rdf:resource="https://identifiers.org/opb/OPB_00340" />
-        </rdf:Description>
-      </semsim:isComputationalComponentFor>
-      <dcterms:description>thermodynamic constant</dcterms:description>
-    </rdf:Description>
-    <rdf:Description rdf:about="#mapk2.K_P">
-      <semsim:isComputationalComponentFor>
-        <rdf:Description rdf:about="#property_17">
-          <semsim:physicalPropertyOf rdf:resource="#entity_8" />
-          <semsim:hasPhysicalDefinition rdf:resource="https://identifiers.org/opb/OPB_00340" />
-        </rdf:Description>
-      </semsim:isComputationalComponentFor>
-      <dcterms:description>thermodynamic constant</dcterms:description>
-    </rdf:Description>
-    <rdf:Description rdf:about="#mapk2.ADP">
-      <semsim:isComputationalComponentFor>
-        <rdf:Description rdf:about="#property_7">
-          <semsim:physicalPropertyOf>
-            <rdf:Description rdf:about="#entity_7">
-              <semsim:hasPhysicalDefinition rdf:resource="http://identifiers.org/go/GO:0043531" />
-            </rdf:Description>
-          </semsim:physicalPropertyOf>
-          <semsim:hasPhysicalDefinition rdf:resource="https://identifiers.org/opb/OPB_00340" />
-        </rdf:Description>
-      </semsim:isComputationalComponentFor>
-    </rdf:Description>
-    <rdf:Description rdf:about="#mapk2.K_MKK">
-      <semsim:isComputationalComponentFor>
-        <rdf:Description rdf:about="#property_9">
-          <semsim:physicalPropertyOf rdf:resource="#entity_0" />
-          <semsim:hasPhysicalDefinition rdf:resource="https://identifiers.org/opb/OPB_00340" />
-        </rdf:Description>
-      </semsim:isComputationalComponentFor>
-      <dcterms:description>thermodynamic constant</dcterms:description>
-    </rdf:Description>
-    <rdf:Description rdf:about="#mapk2.r4">
-      <semsim:isComputationalComponentFor>
-        <rdf:Description rdf:about="#property_21">
-          <semsim:physicalPropertyOf>
-            <rdf:Description rdf:about="#entity_14">
-              <ro:part_of>
-                <rdf:Description rdf:about="#entity_15">
-                  <ro:part_of rdf:resource="#entity_8" />
-                  <semsim:hasPhysicalDefinition rdf:resource="http://identifiers.org/go/GO:0004708" />
+        <rdf:Description xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" rdf:about="#mapk2.r1">
+            <semsim:isComputationalComponentFor xmlns:semsim="http://www.bhi.washington.edu/SemSim#">
+                <rdf:Description xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" rdf:about="#property_18">
+                    <semsim:physicalPropertyOf xmlns:semsim="http://www.bhi.washington.edu/SemSim#">
+                        <rdf:Description xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" rdf:about="#entity_9">
+                            <ro:part_of xmlns:ro="http://www.obofoundry.org/ro/ro.owl#">
+                                <rdf:Description xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" rdf:about="#entity_10">
+                                    <ro:part_of xmlns:ro="http://www.obofoundry.org/ro/ro.owl#">
+                                        <rdf:Description xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" rdf:about="#entity_6">
+                                            <semsim:hasPhysicalDefinition xmlns:semsim="http://www.bhi.washington.edu/SemSim#" rdf:resource="http://identifiers.org/go/GO:0005524" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"/>
+                                        </rdf:Description>
+                                    </ro:part_of>
+                                    <semsim:hasPhysicalDefinition xmlns:semsim="http://www.bhi.washington.edu/SemSim#" rdf:resource="http://identifiers.org/go/GO:0004708" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"/>
+                                </rdf:Description>
+                            </ro:part_of>
+                            <semsim:hasPhysicalDefinition xmlns:semsim="http://www.bhi.washington.edu/SemSim#" rdf:resource="http://identifiers.org/go/GO:0016310" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"/>
+                        </rdf:Description>
+                    </semsim:physicalPropertyOf>
+                    <semsim:hasPhysicalDefinition xmlns:semsim="http://www.bhi.washington.edu/SemSim#" rdf:resource="https://identifiers.org/opb/OPB_01296" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"/>
                 </rdf:Description>
-              </ro:part_of>
-              <semsim:hasPhysicalDefinition rdf:resource="http://identifiers.org/go/GO:0016311" />
-            </rdf:Description>
-          </semsim:physicalPropertyOf>
-          <semsim:hasPhysicalDefinition rdf:resource="https://identifiers.org/opb/OPB_01296" />
+            </semsim:isComputationalComponentFor>
         </rdf:Description>
-      </semsim:isComputationalComponentFor>
-    </rdf:Description>
-    <rdf:Description rdf:about="#mapk2.ATP">
-      <semsim:isComputationalComponentFor>
-        <rdf:Description rdf:about="#property_6">
-          <semsim:physicalPropertyOf rdf:resource="#entity_6" />
-          <semsim:hasPhysicalDefinition rdf:resource="https://identifiers.org/opb/OPB_00340" />
-        </rdf:Description>
-      </semsim:isComputationalComponentFor>
-    </rdf:Description>
-    <rdf:Description rdf:about="#mapk2.E2">
-      <semsim:isComputationalComponentFor>
-        <rdf:Description rdf:about="#property_5">
-          <semsim:physicalPropertyOf>
-            <rdf:Description rdf:about="#entity_5">
-              <semsim:hasPhysicalDefinition rdf:resource="http://identifiers.org/go/GO:0016791" />
-            </rdf:Description>
-          </semsim:physicalPropertyOf>
-          <semsim:hasPhysicalDefinition rdf:resource="https://identifiers.org/opb/OPB_00340" />
-        </rdf:Description>
-      </semsim:isComputationalComponentFor>
-    </rdf:Description>
-    <rdf:Description rdf:about="#mapk2.C2">
-      <semsim:isComputationalComponentFor>
-        <rdf:Description rdf:about="#property_3">
-          <semsim:physicalPropertyOf rdf:resource="#entity_3" />
-          <semsim:hasPhysicalDefinition rdf:resource="https://identifiers.org/opb/OPB_00340" />
-        </rdf:Description>
-      </semsim:isComputationalComponentFor>
-    </rdf:Description>
-    <rdf:Description rdf:about="#mapk2.K_MKKP">
-      <semsim:isComputationalComponentFor>
-        <rdf:Description rdf:about="#property_10">
-          <semsim:physicalPropertyOf>
-            <rdf:Description rdf:about="#entity_1">
-              <semsim:hasPhysicalDefinition rdf:resource="http://identifiers.org/go/GO:0000186" />
-            </rdf:Description>
-          </semsim:physicalPropertyOf>
-          <semsim:hasPhysicalDefinition rdf:resource="https://identifiers.org/opb/OPB_00340" />
-        </rdf:Description>
-      </semsim:isComputationalComponentFor>
-      <dcterms:description>thermodynamic constant</dcterms:description>
-    </rdf:Description>
-    <rdf:Description rdf:about="#mapk2.R">
-      <bqbiol:is rdf:resource="https://identifiers.org/opb/OPB_00410" />
-    </rdf:Description>
-    <rdf:Description rdf:about="#mapk2.MKKP">
-      <semsim:isComputationalComponentFor>
-        <rdf:Description rdf:about="#property_1">
-          <semsim:physicalPropertyOf rdf:resource="#entity_1" />
-          <semsim:hasPhysicalDefinition rdf:resource="https://identifiers.org/opb/OPB_00340" />
-        </rdf:Description>
-      </semsim:isComputationalComponentFor>
-    </rdf:Description>
-    <rdf:Description rdf:about="#mapk2.r3">
-      <semsim:isComputationalComponentFor>
-        <rdf:Description rdf:about="#property_20">
-          <semsim:physicalPropertyOf>
-            <rdf:Description rdf:about="#entity_13">
-              <ro:part_of>
-                <rdf:Description rdf:about="#entity_12">
-                  <ro:part_of rdf:resource="#entity_7" />
-                  <semsim:hasPhysicalDefinition rdf:resource="http://identifiers.org/go/GO:0000186" />
+        <rdf:Description xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" rdf:about="#mapk2.MKK">
+            <semsim:isComputationalComponentFor xmlns:semsim="http://www.bhi.washington.edu/SemSim#">
+                <rdf:Description xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" rdf:about="#property_0">
+                    <semsim:physicalPropertyOf xmlns:semsim="http://www.bhi.washington.edu/SemSim#">
+                        <rdf:Description xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" rdf:about="#entity_0">
+                            <semsim:hasPhysicalDefinition xmlns:semsim="http://www.bhi.washington.edu/SemSim#" rdf:resource="http://identifiers.org/go/GO:0004708" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"/>
+                        </rdf:Description>
+                    </semsim:physicalPropertyOf>
+                    <semsim:hasPhysicalDefinition xmlns:semsim="http://www.bhi.washington.edu/SemSim#" rdf:resource="https://identifiers.org/opb/OPB_00340" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"/>
                 </rdf:Description>
-              </ro:part_of>
-              <semsim:hasPhysicalDefinition rdf:resource="http://identifiers.org/go/GO:0016311" />
-            </rdf:Description>
-          </semsim:physicalPropertyOf>
-          <semsim:hasPhysicalDefinition rdf:resource="https://identifiers.org/opb/OPB_01296" />
+            </semsim:isComputationalComponentFor>
         </rdf:Description>
-      </semsim:isComputationalComponentFor>
-    </rdf:Description>
-    <rdf:Description rdf:about="#metaid0" semsim:modelName="cycle2">
-      <semsim:modelName>MAPK_L2</semsim:modelName>
-    </rdf:Description>
-    <rdf:Description rdf:about="#mapk2.T">
-      <bqbiol:is rdf:resource="https://identifiers.org/opb/OPB_00293" />
-    </rdf:Description>
-    <rdf:Description rdf:about="#mapk2.E1">
-      <semsim:isComputationalComponentFor>
-        <rdf:Description rdf:about="#property_4">
-          <semsim:physicalPropertyOf rdf:resource="#entity_4" />
-          <semsim:hasPhysicalDefinition rdf:resource="https://identifiers.org/opb/OPB_00340" />
+        <rdf:Description xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" rdf:about="#mapk2.R">
+            <bqbiol:is xmlns:bqbiol="http://biomodels.net/biology-qualifiers/" rdf:resource="https://identifiers.org/opb/OPB_00410" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"/>
         </rdf:Description>
-      </semsim:isComputationalComponentFor>
-    </rdf:Description>
-    <rdf:Description rdf:about="#mapk2.C1">
-      <semsim:isComputationalComponentFor>
-        <rdf:Description rdf:about="#property_2">
-          <semsim:physicalPropertyOf rdf:resource="#entity_2" />
-          <semsim:hasPhysicalDefinition rdf:resource="https://identifiers.org/opb/OPB_00340" />
+        <rdf:Description xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" rdf:about="#mapk2.K_ATP">
+            <semsim:isComputationalComponentFor xmlns:semsim="http://www.bhi.washington.edu/SemSim#">
+                <rdf:Description xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" rdf:about="#property_15">
+                    <semsim:physicalPropertyOf xmlns:semsim="http://www.bhi.washington.edu/SemSim#" rdf:resource="#entity_6" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"/>
+                    <semsim:hasPhysicalDefinition xmlns:semsim="http://www.bhi.washington.edu/SemSim#" rdf:resource="https://identifiers.org/opb/OPB_00340" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"/>
+                </rdf:Description>
+            </semsim:isComputationalComponentFor>
+            <dcterms:description xmlns:dcterms="http://purl.org/dc/terms/">thermodynamic constant</dcterms:description>
         </rdf:Description>
-      </semsim:isComputationalComponentFor>
-    </rdf:Description>
-    <rdf:Description rdf:about="#mapk2.K_ADP">
-      <semsim:isComputationalComponentFor>
-        <rdf:Description rdf:about="#property_16">
-          <semsim:physicalPropertyOf rdf:resource="#entity_7" />
-          <semsim:hasPhysicalDefinition rdf:resource="https://identifiers.org/opb/OPB_00340" />
+        <rdf:Description xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" rdf:about="#mapk2.K_E1">
+            <semsim:isComputationalComponentFor xmlns:semsim="http://www.bhi.washington.edu/SemSim#">
+                <rdf:Description xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" rdf:about="#property_13">
+                    <semsim:physicalPropertyOf xmlns:semsim="http://www.bhi.washington.edu/SemSim#">
+                        <rdf:Description xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" rdf:about="#entity_4">
+                            <semsim:hasPhysicalDefinition xmlns:semsim="http://www.bhi.washington.edu/SemSim#" rdf:resource="http://identifiers.org/go/GO:0000185" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"/>
+                        </rdf:Description>
+                    </semsim:physicalPropertyOf>
+                    <semsim:hasPhysicalDefinition xmlns:semsim="http://www.bhi.washington.edu/SemSim#" rdf:resource="https://identifiers.org/opb/OPB_00340" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"/>
+                </rdf:Description>
+            </semsim:isComputationalComponentFor>
+            <dcterms:description xmlns:dcterms="http://purl.org/dc/terms/">thermodynamic constant</dcterms:description>
         </rdf:Description>
-      </semsim:isComputationalComponentFor>
-      <dcterms:description>thermodynamic constant</dcterms:description>
-    </rdf:Description>
-    <rdf:Description rdf:about="#mapk2.r2">
-      <semsim:isComputationalComponentFor>
-        <rdf:Description rdf:about="#property_19">
-          <semsim:physicalPropertyOf>
-            <rdf:Description rdf:about="#entity_11">
-              <ro:part_of rdf:resource="#entity_12" />
-              <semsim:hasPhysicalDefinition rdf:resource="http://identifiers.org/go/GO:0016310" />
-            </rdf:Description>
-          </semsim:physicalPropertyOf>
-          <semsim:hasPhysicalDefinition rdf:resource="https://identifiers.org/opb/OPB_01296" />
+        <rdf:Description xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" rdf:about="#mapk2.K_C1">
+            <semsim:isComputationalComponentFor xmlns:semsim="http://www.bhi.washington.edu/SemSim#">
+                <rdf:Description xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" rdf:about="#property_11">
+                    <semsim:physicalPropertyOf xmlns:semsim="http://www.bhi.washington.edu/SemSim#">
+                        <rdf:Description xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" rdf:about="#entity_2">
+                            <semsim:hasPhysicalDefinition xmlns:semsim="http://www.bhi.washington.edu/SemSim#" rdf:resource="http://identifiers.org/go/GO:0006468" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"/>
+                        </rdf:Description>
+                    </semsim:physicalPropertyOf>
+                    <semsim:hasPhysicalDefinition xmlns:semsim="http://www.bhi.washington.edu/SemSim#" rdf:resource="https://identifiers.org/opb/OPB_00340" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"/>
+                </rdf:Description>
+            </semsim:isComputationalComponentFor>
+            <dcterms:description xmlns:dcterms="http://purl.org/dc/terms/">thermodynamic constant</dcterms:description>
         </rdf:Description>
-      </semsim:isComputationalComponentFor>
-    </rdf:Description>
-    <rdf:Description rdf:about="#mapk2.K_MKK_Pase">
-      <semsim:isComputationalComponentFor>
-        <rdf:Description rdf:about="#property_14">
-          <semsim:physicalPropertyOf rdf:resource="#entity_5" />
-          <semsim:hasPhysicalDefinition rdf:resource="https://identifiers.org/opb/OPB_00340" />
+        <rdf:Description xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" rdf:about="#mapk2.K_C2">
+            <semsim:isComputationalComponentFor xmlns:semsim="http://www.bhi.washington.edu/SemSim#">
+                <rdf:Description xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" rdf:about="#property_12">
+                    <semsim:physicalPropertyOf xmlns:semsim="http://www.bhi.washington.edu/SemSim#">
+                        <rdf:Description xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" rdf:about="#entity_3">
+                            <semsim:hasPhysicalDefinition xmlns:semsim="http://www.bhi.washington.edu/SemSim#" rdf:resource="http://identifiers.org/go/GO:0006470" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"/>
+                        </rdf:Description>
+                    </semsim:physicalPropertyOf>
+                    <semsim:hasPhysicalDefinition xmlns:semsim="http://www.bhi.washington.edu/SemSim#" rdf:resource="https://identifiers.org/opb/OPB_00340" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"/>
+                </rdf:Description>
+            </semsim:isComputationalComponentFor>
+            <dcterms:description xmlns:dcterms="http://purl.org/dc/terms/">thermodynamic constant</dcterms:description>
         </rdf:Description>
-      </semsim:isComputationalComponentFor>
-      <dcterms:description>thermodynamic constant</dcterms:description>
-    </rdf:Description>
-  </rdf:RDF>
+        <rdf:Description xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" rdf:about="#mapk2.K_P">
+            <semsim:isComputationalComponentFor xmlns:semsim="http://www.bhi.washington.edu/SemSim#">
+                <rdf:Description xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" rdf:about="#property_17">
+                    <semsim:physicalPropertyOf xmlns:semsim="http://www.bhi.washington.edu/SemSim#" rdf:resource="#entity_8" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"/>
+                    <semsim:hasPhysicalDefinition xmlns:semsim="http://www.bhi.washington.edu/SemSim#" rdf:resource="https://identifiers.org/opb/OPB_00340" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"/>
+                </rdf:Description>
+            </semsim:isComputationalComponentFor>
+            <dcterms:description xmlns:dcterms="http://purl.org/dc/terms/">thermodynamic constant</dcterms:description>
+        </rdf:Description>
+        <rdf:Description xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" rdf:about="#mapk2.ADP">
+            <semsim:isComputationalComponentFor xmlns:semsim="http://www.bhi.washington.edu/SemSim#">
+                <rdf:Description xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" rdf:about="#property_7">
+                    <semsim:physicalPropertyOf xmlns:semsim="http://www.bhi.washington.edu/SemSim#">
+                        <rdf:Description xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" rdf:about="#entity_7">
+                            <semsim:hasPhysicalDefinition xmlns:semsim="http://www.bhi.washington.edu/SemSim#" rdf:resource="http://identifiers.org/go/GO:0043531" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"/>
+                        </rdf:Description>
+                    </semsim:physicalPropertyOf>
+                    <semsim:hasPhysicalDefinition xmlns:semsim="http://www.bhi.washington.edu/SemSim#" rdf:resource="https://identifiers.org/opb/OPB_00340" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"/>
+                </rdf:Description>
+            </semsim:isComputationalComponentFor>
+        </rdf:Description>
+        <rdf:Description xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" rdf:about="#mapk2.K_MKK">
+            <semsim:isComputationalComponentFor xmlns:semsim="http://www.bhi.washington.edu/SemSim#">
+                <rdf:Description xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" rdf:about="#property_9">
+                    <semsim:physicalPropertyOf xmlns:semsim="http://www.bhi.washington.edu/SemSim#" rdf:resource="#entity_0" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"/>
+                    <semsim:hasPhysicalDefinition xmlns:semsim="http://www.bhi.washington.edu/SemSim#" rdf:resource="https://identifiers.org/opb/OPB_00340" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"/>
+                </rdf:Description>
+            </semsim:isComputationalComponentFor>
+            <dcterms:description xmlns:dcterms="http://purl.org/dc/terms/">thermodynamic constant</dcterms:description>
+        </rdf:Description>
+        <rdf:Description xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" rdf:about="#mapk2.r4">
+            <semsim:isComputationalComponentFor xmlns:semsim="http://www.bhi.washington.edu/SemSim#">
+                <rdf:Description xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" rdf:about="#property_21">
+                    <semsim:physicalPropertyOf xmlns:semsim="http://www.bhi.washington.edu/SemSim#">
+                        <rdf:Description xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" rdf:about="#entity_14">
+                            <ro:part_of xmlns:ro="http://www.obofoundry.org/ro/ro.owl#">
+                                <rdf:Description xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" rdf:about="#entity_15">
+                                    <ro:part_of xmlns:ro="http://www.obofoundry.org/ro/ro.owl#" rdf:resource="#entity_8" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"/>
+                                    <semsim:hasPhysicalDefinition xmlns:semsim="http://www.bhi.washington.edu/SemSim#" rdf:resource="http://identifiers.org/go/GO:0004708" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"/>
+                                </rdf:Description>
+                            </ro:part_of>
+                            <semsim:hasPhysicalDefinition xmlns:semsim="http://www.bhi.washington.edu/SemSim#" rdf:resource="http://identifiers.org/go/GO:0016311" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"/>
+                        </rdf:Description>
+                    </semsim:physicalPropertyOf>
+                    <semsim:hasPhysicalDefinition xmlns:semsim="http://www.bhi.washington.edu/SemSim#" rdf:resource="https://identifiers.org/opb/OPB_01296" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"/>
+                </rdf:Description>
+            </semsim:isComputationalComponentFor>
+        </rdf:Description>
+        <rdf:Description xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" rdf:about="#mapk2.ATP">
+            <semsim:isComputationalComponentFor xmlns:semsim="http://www.bhi.washington.edu/SemSim#">
+                <rdf:Description xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" rdf:about="#property_6">
+                    <semsim:physicalPropertyOf xmlns:semsim="http://www.bhi.washington.edu/SemSim#" rdf:resource="#entity_6" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"/>
+                    <semsim:hasPhysicalDefinition xmlns:semsim="http://www.bhi.washington.edu/SemSim#" rdf:resource="https://identifiers.org/opb/OPB_00340" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"/>
+                </rdf:Description>
+            </semsim:isComputationalComponentFor>
+        </rdf:Description>
+        <rdf:Description xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" rdf:about="#mapk2.E2">
+            <semsim:isComputationalComponentFor xmlns:semsim="http://www.bhi.washington.edu/SemSim#">
+                <rdf:Description xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" rdf:about="#property_5">
+                    <semsim:physicalPropertyOf xmlns:semsim="http://www.bhi.washington.edu/SemSim#">
+                        <rdf:Description xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" rdf:about="#entity_5">
+                            <semsim:hasPhysicalDefinition xmlns:semsim="http://www.bhi.washington.edu/SemSim#" rdf:resource="http://identifiers.org/go/GO:0019902" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"/>
+                        </rdf:Description>
+                    </semsim:physicalPropertyOf>
+                    <semsim:hasPhysicalDefinition xmlns:semsim="http://www.bhi.washington.edu/SemSim#" rdf:resource="https://identifiers.org/opb/OPB_00340" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"/>
+                </rdf:Description>
+            </semsim:isComputationalComponentFor>
+        </rdf:Description>
+        <rdf:Description xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" rdf:about="#mapk2.C2">
+            <semsim:isComputationalComponentFor xmlns:semsim="http://www.bhi.washington.edu/SemSim#">
+                <rdf:Description xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" rdf:about="#property_3">
+                    <semsim:physicalPropertyOf xmlns:semsim="http://www.bhi.washington.edu/SemSim#" rdf:resource="#entity_3" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"/>
+                    <semsim:hasPhysicalDefinition xmlns:semsim="http://www.bhi.washington.edu/SemSim#" rdf:resource="https://identifiers.org/opb/OPB_00340" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"/>
+                </rdf:Description>
+            </semsim:isComputationalComponentFor>
+        </rdf:Description>
+        <rdf:Description xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" rdf:about="#mapk2.K_MKKP">
+            <semsim:isComputationalComponentFor xmlns:semsim="http://www.bhi.washington.edu/SemSim#">
+                <rdf:Description xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" rdf:about="#property_10">
+                    <semsim:physicalPropertyOf xmlns:semsim="http://www.bhi.washington.edu/SemSim#">
+                        <rdf:Description xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" rdf:about="#entity_1">
+                            <semsim:hasPhysicalDefinition xmlns:semsim="http://www.bhi.washington.edu/SemSim#" rdf:resource="http://identifiers.org/go/GO:0000186" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"/>
+                        </rdf:Description>
+                    </semsim:physicalPropertyOf>
+                    <semsim:hasPhysicalDefinition xmlns:semsim="http://www.bhi.washington.edu/SemSim#" rdf:resource="https://identifiers.org/opb/OPB_00340" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"/>
+                </rdf:Description>
+            </semsim:isComputationalComponentFor>
+            <dcterms:description xmlns:dcterms="http://purl.org/dc/terms/">thermodynamic constant</dcterms:description>
+        </rdf:Description>
+        <rdf:Description xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" rdf:about="#mapk2.R">
+            <bqbiol:is xmlns:bqbiol="http://biomodels.net/biology-qualifiers/" rdf:resource="https://identifiers.org/opb/OPB_00410" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"/>
+        </rdf:Description>
+        <rdf:Description xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" rdf:about="#mapk2.MKKP">
+            <semsim:isComputationalComponentFor xmlns:semsim="http://www.bhi.washington.edu/SemSim#">
+                <rdf:Description xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" rdf:about="#property_1">
+                    <semsim:physicalPropertyOf xmlns:semsim="http://www.bhi.washington.edu/SemSim#" rdf:resource="#entity_1" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"/>
+                    <semsim:hasPhysicalDefinition xmlns:semsim="http://www.bhi.washington.edu/SemSim#" rdf:resource="https://identifiers.org/opb/OPB_00340" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"/>
+                </rdf:Description>
+            </semsim:isComputationalComponentFor>
+        </rdf:Description>
+        <rdf:Description xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" rdf:about="#mapk2.r3">
+            <semsim:isComputationalComponentFor xmlns:semsim="http://www.bhi.washington.edu/SemSim#">
+                <rdf:Description xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" rdf:about="#property_20">
+                    <semsim:physicalPropertyOf xmlns:semsim="http://www.bhi.washington.edu/SemSim#">
+                        <rdf:Description xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" rdf:about="#entity_13">
+                            <ro:part_of xmlns:ro="http://www.obofoundry.org/ro/ro.owl#">
+                                <rdf:Description xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" rdf:about="#entity_12">
+                                    <ro:part_of xmlns:ro="http://www.obofoundry.org/ro/ro.owl#" rdf:resource="#entity_7" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"/>
+                                    <semsim:hasPhysicalDefinition xmlns:semsim="http://www.bhi.washington.edu/SemSim#" rdf:resource="http://identifiers.org/go/GO:0000186" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"/>
+                                </rdf:Description>
+                            </ro:part_of>
+                            <semsim:hasPhysicalDefinition xmlns:semsim="http://www.bhi.washington.edu/SemSim#" rdf:resource="http://identifiers.org/go/GO:0016311" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"/>
+                        </rdf:Description>
+                    </semsim:physicalPropertyOf>
+                    <semsim:hasPhysicalDefinition xmlns:semsim="http://www.bhi.washington.edu/SemSim#" rdf:resource="https://identifiers.org/opb/OPB_01296" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"/>
+                </rdf:Description>
+            </semsim:isComputationalComponentFor>
+        </rdf:Description>
+        <rdf:Description xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" modelName="cycle2" rdf:about="#metaid0">
+            <semsim:modelName xmlns:semsim="http://www.bhi.washington.edu/SemSim#">MAPK_L2</semsim:modelName>
+        </rdf:Description>
+        <rdf:Description xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" rdf:about="#mapk2.T">
+            <bqbiol:is xmlns:bqbiol="http://biomodels.net/biology-qualifiers/" rdf:resource="https://identifiers.org/opb/OPB_00293" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"/>
+        </rdf:Description>
+        <rdf:Description xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" rdf:about="#mapk2.E1">
+            <semsim:isComputationalComponentFor xmlns:semsim="http://www.bhi.washington.edu/SemSim#">
+                <rdf:Description xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" rdf:about="#property_4">
+                    <semsim:physicalPropertyOf xmlns:semsim="http://www.bhi.washington.edu/SemSim#" rdf:resource="#entity_4" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"/>
+                    <semsim:hasPhysicalDefinition xmlns:semsim="http://www.bhi.washington.edu/SemSim#" rdf:resource="https://identifiers.org/opb/OPB_00340" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"/>
+                </rdf:Description>
+            </semsim:isComputationalComponentFor>
+        </rdf:Description>
+        <rdf:Description xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" rdf:about="#mapk2.C1">
+            <semsim:isComputationalComponentFor xmlns:semsim="http://www.bhi.washington.edu/SemSim#">
+                <rdf:Description xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" rdf:about="#property_2">
+                    <semsim:physicalPropertyOf xmlns:semsim="http://www.bhi.washington.edu/SemSim#" rdf:resource="#entity_2" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"/>
+                    <semsim:hasPhysicalDefinition xmlns:semsim="http://www.bhi.washington.edu/SemSim#" rdf:resource="https://identifiers.org/opb/OPB_00340" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"/>
+                </rdf:Description>
+            </semsim:isComputationalComponentFor>
+        </rdf:Description>
+        <rdf:Description xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" rdf:about="#mapk2.K_ADP">
+            <semsim:isComputationalComponentFor xmlns:semsim="http://www.bhi.washington.edu/SemSim#">
+                <rdf:Description xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" rdf:about="#property_16">
+                    <semsim:physicalPropertyOf xmlns:semsim="http://www.bhi.washington.edu/SemSim#" rdf:resource="#entity_7" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"/>
+                    <semsim:hasPhysicalDefinition xmlns:semsim="http://www.bhi.washington.edu/SemSim#" rdf:resource="https://identifiers.org/opb/OPB_00340" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"/>
+                </rdf:Description>
+            </semsim:isComputationalComponentFor>
+            <dcterms:description xmlns:dcterms="http://purl.org/dc/terms/">thermodynamic constant</dcterms:description>
+        </rdf:Description>
+        <rdf:Description xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" rdf:about="#mapk2.r2">
+            <semsim:isComputationalComponentFor xmlns:semsim="http://www.bhi.washington.edu/SemSim#">
+                <rdf:Description xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" rdf:about="#property_19">
+                    <semsim:physicalPropertyOf xmlns:semsim="http://www.bhi.washington.edu/SemSim#">
+                        <rdf:Description xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" rdf:about="#entity_11">
+                            <ro:part_of xmlns:ro="http://www.obofoundry.org/ro/ro.owl#" rdf:resource="#entity_12" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"/>
+                            <semsim:hasPhysicalDefinition xmlns:semsim="http://www.bhi.washington.edu/SemSim#" rdf:resource="http://identifiers.org/go/GO:0016310" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"/>
+                        </rdf:Description>
+                    </semsim:physicalPropertyOf>
+                    <semsim:hasPhysicalDefinition xmlns:semsim="http://www.bhi.washington.edu/SemSim#" rdf:resource="https://identifiers.org/opb/OPB_01296" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"/>
+                </rdf:Description>
+            </semsim:isComputationalComponentFor>
+        </rdf:Description>
+        <rdf:Description xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" rdf:about="#mapk2.K_MKK_Pase">
+            <semsim:isComputationalComponentFor xmlns:semsim="http://www.bhi.washington.edu/SemSim#">
+                <rdf:Description xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" rdf:about="#property_14">
+                    <semsim:physicalPropertyOf xmlns:semsim="http://www.bhi.washington.edu/SemSim#" rdf:resource="#entity_5" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"/>
+                    <semsim:hasPhysicalDefinition xmlns:semsim="http://www.bhi.washington.edu/SemSim#" rdf:resource="https://identifiers.org/opb/OPB_00340" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"/>
+                </rdf:Description>
+            </semsim:isComputationalComponentFor>
+            <dcterms:description xmlns:dcterms="http://purl.org/dc/terms/">thermodynamic constant</dcterms:description>
+        </rdf:Description>
+    </rdf:RDF>
 </model>
-
