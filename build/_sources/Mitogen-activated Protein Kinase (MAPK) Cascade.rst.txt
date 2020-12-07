@@ -1,0 +1,40 @@
+.. Automated Model Composition master file, created by
+   sphinx-quickstart on Mon Dec 1 16:22:42 2020.
+   You can adapt this file completely to your liking, but it should at least
+   contain the root `toctree` directive.
+
+=====================================
+    **Mitogen-activated Protein Kinase (MAPK) Cascade**
+=====================================
+
+The Mitogen-activated Protein Kinase (MAPK) cascade is a signalling pathway, which activates in respond to a stimulus and amplifies the input signal [1]_ and [2]_. It contributes in multiple biological processes. The cascade consists of three layers (totally five cycles) as in Figure 2. 
+
+.. figure:: _images/MAPK_cascade.png
+    :width: 600px
+    :align: center
+    :height: 420px
+    :alt: alternate text
+    :figclass: align-center
+
+    Figure 2. Layers and cycles in the MAPK cascade.
+
+
+The repetitive structure in the cycles makes the MAPK cascade a suitable example of reusabilty. Here, as mentioned in `The Approach`_, we demonstrate how the model of the whole cascade can be implemented auomatically 
+
+
+
+
+
+
+
+
+
+
+.. [1] Sarma, U., & Ghosh, I. (2012). Oscillations in MAPK cascade triggered by two distinct designs of coupled positive and negative feedback loops. `<http://www.biomedcentral.com/1756-0500/5/287>`_
+
+
+.. [2] Pan, M. (2020). ............. `<.............>`_
+
+
+
+

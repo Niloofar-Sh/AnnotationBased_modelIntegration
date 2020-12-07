@@ -1,0 +1,123 @@
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml" lang="En">
+  <head>
+    <meta charset="utf-8" />
+    <title>The Approach &#8212; Automated Model Composition Dec 2020 documentation</title>
+    <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <script type="text/javascript" src="_static/language_data.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Mitogen-activated Protein Kinase (MAPK) Cascade" href="mapk_Cascade.html" />
+    <link rel="prev" title="Introduction" href="Introduction.html" />
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <div class="section" id="the-approach">
+<span id="id1"></span><h1><strong>The Approach</strong><a class="headerlink" href="#the-approach" title="Permalink to this headline">¶</a></h1>
+<p>To be able to reuse and compose models in online repositories such as PMR, we need a tool to first, convert a non-bond-graph model into an equivalent bond graph one; second, automatically assign the parameters in the models to the bond graph components; third, identify the same entities in the models as the merging points and make the necessary changes to join the models without any loss of information.</p>
+<p>The automation in the model composition can be achieved by adding information (standard meaningful names) to the variables. Ontologies are databases which contain standard descriptive names (annotations) in domains of physics, biology, genes, chemistry, and so forth. By annotating the models’ variables, similar entities can be detected among the models and considered as potential merging points.</p>
+<p>To improve our model composition method towards automation and to reuse the models in other formalisms, we employed the idea of having symbolic bond graph templates along with their connectivity matrices. For the identification of the merging points between the models, we still need the variables and parameters of the models to be fully annotated. To summarize, the prerequisites of this automated model composition method are as follows:</p>
+<ul class="simple">
+<li><p>Bond graph symbolic templates of the models,</p></li>
+<li><p>Connectivity matrix of each template defining whether the components are connected to the other ones or not by ‘1’s and ‘0’s,</p></li>
+<li><p>Ontologies required for matching the annotations, and</p></li>
+<li><p>Annotated models.</p></li>
+</ul>
+<p>In a given biological/physiological/physical context, our tool can detect the type of bond graph template required for substituting the original annotated model. Thereafter, by finding similar annotations in the models, the merging points will be selected. Based on this, the required changes in the bond graph components (deleting the duplicates) and the connectivity matrices (adding/deleting rows and columns or inserting ‘1’s) will be made. Ultimately, the final model will be produced based on the connection/non-connection relationships between all the components. This approach generated a model of signalling pathways (MAPK cascades), and the simulation results were verified. The flowchart of this approach is given in Figure 1.</p>
+<div class="align-center figure" id="id2">
+<a class="reference internal image-reference" href="_images/flowchart.jpg"><img alt="alternate text" src="_images/flowchart.jpg" style="width: 700px; height: 900px;" /></a>
+<p class="caption"><span class="caption-text">Figure 1. The flowchart of the model composition automation.</span><a class="headerlink" href="#id2" title="Permalink to this image">¶</a></p>
+</div>
+</div>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="index.html">Automated Model Composition</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="Introduction.html"><strong>Introduction</strong></a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#"><strong>The Approach</strong></a></li>
+<li class="toctree-l1"><a class="reference internal" href="mapk_Cascade.html"><strong>Mitogen-activated Protein Kinase (MAPK) Cascade</strong></a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="index.html">Documentation overview</a><ul>
+      <li>Previous: <a href="Introduction.html" title="previous chapter"><strong>Introduction</strong></a></li>
+      <li>Next: <a href="mapk_Cascade.html" title="next chapter"><strong>Mitogen-activated Protein Kinase (MAPK) Cascade</strong></a></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2020, Niloofar Shahidi.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 2.1.2</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+      |
+      <a href="_sources/The_approach.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>
