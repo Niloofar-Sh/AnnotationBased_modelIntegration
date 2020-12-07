@@ -1,0 +1,693 @@
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml" lang="En">
+  <head>
+    <meta charset="utf-8" />
+    <title>Mitogen-activated Protein Kinase (MAPK) Cascade &#8212; Automated Model Composition Dec 2020 documentation</title>
+    <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <script type="text/javascript" src="_static/language_data.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="prev" title="The Approach" href="The_approach.html" />
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <div class="section" id="mitogen-activated-protein-kinase-mapk-cascade">
+<h1><strong>Mitogen-activated Protein Kinase (MAPK) Cascade</strong><a class="headerlink" href="#mitogen-activated-protein-kinase-mapk-cascade" title="Permalink to this headline">¶</a></h1>
+<p>The Mitogen-activated Protein Kinase (MAPK) cascade is a signalling pathway, which activates in respond to a stimulus and amplifies the input signal [<a class="reference internal" href="#id2">1</a> , <a class="reference internal" href="#id3">2</a>]. It contributes in multiple biological processes. The cascade consists of three layers (five cycles in total) as in Figure 2.</p>
+<div class="align-center figure" id="id5">
+<a class="reference internal image-reference" href="_images/MAPK_cascade.jpg"><img alt="alternate text" src="_images/MAPK_cascade.jpg" style="width: 600px; height: 470px;" /></a>
+<p class="caption"><span class="caption-text">Figure 2. Layers and cycles in the MAPK cascade. (A) MAPK pathway in biology. An stimulus (the input Kinase) triggers the signalling from a receptor in the extracellular environment to the nucleus of the cell; (B) utilising the same bond graph template module for the cycles. Each cycle is connected to other cycles if they have species in common.</span><a class="headerlink" href="#id5" title="Permalink to this image">¶</a></p>
+</div>
+<p>The repetitive structure in the cycles makes the MAPK cascade a suitable example of reusabilty <a class="footnote-reference brackets" href="#id3" id="id1">2</a>. Here, as mentioned in <a class="reference internal" href="The_approach.html#the-approach"><span class="std std-ref">The Approach</span></a>, we demonstrate the automated generation of the whole cascade, using the bond graph template of one cycle. Once the annotated variables along with their values are extracted from the CellML models and we have the symbolic bond graph template, the remainder will be a generic composition method for any given model(s).</p>
+<p>The following is the description of the utilised functions and modules in the Jupyter Notebook.</p>
+<div class="section" id="python-libraries">
+<h2>Python libraries<a class="headerlink" href="#python-libraries" title="Permalink to this headline">¶</a></h2>
+<p>The required libraries are as follows:</p>
+<ul class="simple">
+<li><p>General:</p></li>
+</ul>
+<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">copy</span>
+<span class="kn">import</span> <span class="nn">difflib</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
+</pre></div>
+</div>
+<ul class="simple">
+<li><p>Bond graphs:</p></li>
+</ul>
+<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">BondGraphTools</span> <span class="kn">as</span> <span class="nn">bgt</span>
+</pre></div>
+</div>
+<ul class="simple">
+<li><p>Data Extraction:</p></li>
+</ul>
+<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">rdflib</span>
+<span class="kn">from</span> <span class="nn">lxml</span> <span class="kn">import</span> <span class="n">etree</span>
+<span class="kn">import</span> <span class="nn">pandas</span>
+<span class="kn">import</span> <span class="nn">re</span>
+<span class="kn">import</span> <span class="nn">xml.etree.ElementTree</span> <span class="kn">as</span> <span class="nn">ET</span>
+<span class="kn">import</span> <span class="nn">os</span>
+</pre></div>
+</div>
+<ul class="simple">
+<li><p>Plotting:</p></li>
+</ul>
+<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="kn">as</span> <span class="nn">plt</span>
+<span class="kn">from</span> <span class="nn">matplotlib</span> <span class="kn">import</span> <span class="n">markers</span>
+<span class="kn">import</span> <span class="nn">matplotlib.font_manager</span> <span class="kn">as</span> <span class="nn">font_manager</span>
+<span class="kn">import</span> <span class="nn">matplotlib.colors</span>
+<span class="kn">from</span> <span class="nn">pylab</span> <span class="kn">import</span> <span class="n">rcParams</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="ontologies">
+<h2>Ontologies<a class="headerlink" href="#ontologies" title="Permalink to this headline">¶</a></h2>
+<p>As for the ontologies, we have downloaded and saved the required ones in <code class="code python py docutils literal notranslate"><span class="operator"><span class="pre">.</span></span><span class="name"><span class="pre">csv</span></span></code> format from <a class="reference external" href="https://bioportal.bioontology.org/ontologies">bioportal</a>.</p>
+<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="n">FMA</span> <span class="o">=</span> <span class="n">pandas</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s1">&#39;FMA.csv&#39;</span><span class="p">)</span>
+<span class="n">CHEBI</span> <span class="o">=</span> <span class="n">pandas</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s1">&#39;CHEBI.csv&#39;</span><span class="p">)</span>
+<span class="n">OPB</span> <span class="o">=</span> <span class="n">pandas</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s1">&#39;OPB.csv&#39;</span><span class="p">)</span>
+<span class="n">GO</span> <span class="o">=</span> <span class="n">pandas</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s1">&#39;GO.csv&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>The description of these ontologies is given in Table 1.</p>
+<blockquote>
+<div><table class="docutils align-default">
+<colgroup>
+<col style="width: 21%" />
+<col style="width: 79%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Ontology</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><em>FMA</em></p></td>
+<td><p>Foundational Model of Anatomy</p></td>
+</tr>
+<tr class="row-odd"><td><p><em>OPB</em></p></td>
+<td><p>Ontology of Physics for Biology</p></td>
+</tr>
+<tr class="row-even"><td><p><em>CHEBI</em></p></td>
+<td><p>Chemical Entities of Biological Interest</p></td>
+</tr>
+<tr class="row-odd"><td><p><em>GO</em></p></td>
+<td><p>Gene Ontology</p></td>
+</tr>
+</tbody>
+</table>
+<p>Table 1. Ontologies’ description.</p>
+</div></blockquote>
+<ul class="simple">
+<li><p>Extraction of the Class IDs and Labels from the ontologies (<code class="code python py docutils literal notranslate"><span class="operator"><span class="pre">.</span></span><span class="name"><span class="pre">csv</span></span></code> files). The Class IDs are codes particular to each entity and the Preferred Labels are the meanings of the codes. These are extracted and saved in separate lists for later references.</p></li>
+</ul>
+<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="n">fmaID</span> <span class="o">=</span> <span class="n">FMA</span><span class="p">[</span><span class="s1">&#39;Class ID&#39;</span><span class="p">]</span>
+<span class="n">fmaLabel</span><span class="o">=</span> <span class="n">FMA</span><span class="p">[</span><span class="s1">&#39;Preferred Label&#39;</span><span class="p">]</span>
+<span class="n">chebiID</span> <span class="o">=</span> <span class="n">CHEBI</span><span class="p">[</span><span class="s1">&#39;Class ID&#39;</span><span class="p">]</span>
+<span class="n">chebiLabel</span><span class="o">=</span> <span class="n">CHEBI</span><span class="p">[</span><span class="s1">&#39;Preferred Label&#39;</span><span class="p">]</span>
+<span class="n">opbID</span> <span class="o">=</span> <span class="n">OPB</span><span class="p">[</span><span class="s1">&#39;Class ID&#39;</span><span class="p">]</span>
+<span class="n">opbLabel</span><span class="o">=</span> <span class="n">OPB</span><span class="p">[</span><span class="s1">&#39;Preferred Label&#39;</span><span class="p">]</span>
+<span class="n">goID</span> <span class="o">=</span> <span class="n">GO</span><span class="p">[</span><span class="s1">&#39;Class ID&#39;</span><span class="p">]</span>
+<span class="n">goLabel</span><span class="o">=</span> <span class="n">GO</span><span class="p">[</span><span class="s1">&#39;Preferred Label&#39;</span><span class="p">]</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="functions">
+<h2>Functions<a class="headerlink" href="#functions" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="catRecognition">
+<code class="sig-name descname">catRecognition</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#catRecognition" title="Permalink to this definition">¶</a></dt>
+<dd><p>Asking for the category and location of the models given to the function. Here just the choice of MAPK cycles is included.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>[<code class="code python py docutils literal notranslate"><span class="name"><span class="pre">categories</span></span></code>] list of the categories in which each CellML model fits.</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>[<code class="code python py docutils literal notranslate"><span class="name"><span class="pre">addresses</span></span></code>] list of the locations of the CellML files.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<p>This function repeatedly asks the user to insert the location and category of the CellML files. Each CellML file includes the annotated variables of a Mapk cycle. The function stops getting inputs when the user indicates that no further files are going to be added.</p>
+<p>The locations must be inserted similar to the one below:</p>
+<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="o">/</span><span class="n">Users</span><span class="o">/</span><span class="n">nsh</span><span class="o">/</span><span class="n">Documents</span><span class="o">/</span><span class="n">modelCompos</span><span class="o">/</span><span class="n">MAPKcascade</span><span class="o">/</span><span class="n">MAPK_L1</span><span class="o">.</span><span class="n">cellml</span>
+</pre></div>
+</div>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>Make sure you do not put the addresses in quotation marks!</p>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>[categories,addresses]=catRecognition()
+Please select the category of the models according to the following list:
+
+ MAPK ==&gt; insert &quot;m&quot;
+
+
+ Enter the category of the model : m
+ Enter the location address for the corresponding file : /Users/nsha457/Documents/Jupyter_files/Annot_Merging/MAPK cascade/MAPK_L1.cellml
+ More reactions?(Y/N)y
+ Enter the category of the model : m
+ Enter the location address for the corresponding file : /Users/nsha457/Documents/Jupyter_files/Annot_Merging/MAPK cascade/MAPK_L2.cellml
+ More reactions?(Y/N)n
+</pre></div>
+</div>
+<dl class="function">
+<dt id="getAnnotations">
+<code class="sig-name descname">getAnnotations</code><span class="sig-paren">(</span><em class="sig-param">add</em><span class="sig-paren">)</span><a class="headerlink" href="#getAnnotations" title="Permalink to this definition">¶</a></dt>
+<dd><p>Extracting the annotations from the CellML files.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>add</strong> – the list of locations (addresses) which is the output from the “catRecognition” function.</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>[<code class="code python py docutils literal notranslate"><span class="name"><span class="pre">List</span></span></code>] a dictionary containing the names of the variables in the CellML files (in the order of the found annotations).</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>[<code class="code python py docutils literal notranslate"><span class="name"><span class="pre">annotations</span></span></code>] a dictionary containing the annotations in the CellML files.</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>[<code class="code python py docutils literal notranslate"><span class="name"><span class="pre">root</span></span></code>] a dictionary containing the imported XML data from the CellML files.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="valExtraction">
+<code class="sig-name descname">valExtraction</code><span class="sig-paren">(</span><em class="sig-param">root</em><span class="sig-paren">)</span><a class="headerlink" href="#valExtraction" title="Permalink to this definition">¶</a></dt>
+<dd><p>Extracting the variables and values from the CellML files.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>root</strong> – a dictionary containing the imported XML data from the output of the “getAnnotations” functions.</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>[<code class="code python py docutils literal notranslate"><span class="name"><span class="pre">els</span></span></code>] (representing the elements) a dictionary containing the names of the variables in the CellML files (in the order of the  found initial amounts).</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>[<code class="code python py docutils literal notranslate"><span class="name"><span class="pre">init</span></span></code>] (representing the initials) a dictionary containing the initial amounts of the variables in the CellML files.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<p>Figure 3 illustrates how the annotations and values are extracted from the CellML file for an instance substrate (MKKK).</p>
+<div class="align-center figure" id="id6">
+<a class="reference internal image-reference" href="_images/cellml_ex.jpg"><img alt="alternate text" src="_images/cellml_ex.jpg" style="width: 900px; height: 600px;" /></a>
+<p class="caption"><span class="caption-text">Figure 3. Extraction of the annotations and values from the CellML files.</span><a class="headerlink" href="#id6" title="Permalink to this image">¶</a></p>
+</div>
+<p>In the following script the two above functions (<code class="code python py docutils literal notranslate"><span class="name"><span class="pre">getAnnotations</span></span></code>, <code class="code python py docutils literal notranslate"><span class="name"><span class="pre">valExtraction</span></span></code>) are used to extract the annotations, variable names, and their values. For instance, all the annotations of all the files will be saved in ONE dictionary (<code class="code python py docutils literal notranslate"><span class="name"><span class="pre">annotationsMAPKunsorted</span></span></code>) as <code class="code python py docutils literal notranslate"><span class="name"><span class="pre">annotationsMAPKunsorted</span></span><span class="operator"><span class="pre">=</span></span><span class="punctuation"><span class="pre">{</span></span><span class="literal string single"><span class="pre">‘0’</span></span><span class="punctuation"><span class="pre">:{</span></span><span class="operator"><span class="pre">…</span></span><span class="punctuation"><span class="pre">,</span></span><span class="operator"><span class="pre">…</span></span><span class="punctuation"><span class="pre">,</span></span><span class="operator"><span class="pre">…</span></span><span class="punctuation"><span class="pre">},</span></span> <span class="literal string single"><span class="pre">‘1’</span></span><span class="punctuation"><span class="pre">:{</span></span><span class="operator"><span class="pre">…</span></span><span class="punctuation"><span class="pre">,</span></span><span class="operator"><span class="pre">…</span></span><span class="punctuation"><span class="pre">,</span></span><span class="operator"><span class="pre">…</span></span><span class="punctuation"><span class="pre">},</span></span> <span class="operator"><span class="pre">…</span></span><span class="punctuation"><span class="pre">}</span></span></code></p>
+<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="n">listMAPK</span><span class="o">=</span><span class="p">{};</span> <span class="n">annotationsMAPKunsorted</span><span class="o">=</span><span class="p">{};</span> <span class="n">rootMAPK</span><span class="o">=</span><span class="p">{};</span> <span class="n">elementsMAPK</span><span class="o">=</span><span class="p">{};</span> <span class="n">initialsMAPK</span><span class="o">=</span><span class="p">{};</span>
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">categories</span><span class="p">)):</span>
+    <span class="k">if</span> <span class="n">categories</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;m&#39;</span><span class="p">:</span>
+     <span class="p">[</span><span class="n">listMAPK</span><span class="p">[</span><span class="nb">str</span><span class="p">(</span><span class="n">i</span><span class="p">)],</span><span class="n">annotationsMAPKunsorted</span><span class="p">[</span><span class="nb">str</span><span class="p">(</span><span class="n">i</span><span class="p">)],</span><span class="n">rootMAPK</span><span class="p">[</span><span class="nb">str</span><span class="p">(</span><span class="n">i</span><span class="p">)]]</span><span class="o">=</span><span class="n">getAnnotations</span><span class="p">(</span><span class="n">addresses</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
+     <span class="p">[</span><span class="n">elementsMAPK</span><span class="p">[</span><span class="nb">str</span><span class="p">(</span><span class="n">i</span><span class="p">)],</span><span class="n">initialsMAPK</span><span class="p">[</span><span class="nb">str</span><span class="p">(</span><span class="n">i</span><span class="p">)]]</span><span class="o">=</span><span class="n">valExtraction</span><span class="p">(</span><span class="n">rootMAPK</span><span class="p">[</span><span class="nb">str</span><span class="p">(</span><span class="n">i</span><span class="p">)])</span>
+
+    <span class="k">else</span><span class="p">:</span> <span class="c1"># For later adding other categories</span>
+        <span class="k">pass</span>
+</pre></div>
+</div>
+<p>At this point, we need to define our symbolic bond graph model:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">model</span><span class="o">=</span><span class="n">bgt</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s1">&#39;MAPK Cascades&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<dl class="function">
+<dt id="mapkModelMaker">
+<code class="sig-name descname">mapkModelMaker</code><span class="sig-paren">(</span><em class="sig-param">Model</em>, <em class="sig-param">annotations</em><span class="sig-paren">)</span><a class="headerlink" href="#mapkModelMaker" title="Permalink to this definition">¶</a></dt>
+<dd><p>Generating the MAPK cycles’ bond graph symbolic components.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>Model</strong> – the symbolic bond graph model.</p></li>
+<li><p><strong>annotations</strong> – a dictionary containing the annotations in the CellML files.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>[<code class="code python py docutils literal notranslate"><span class="name"><span class="pre">mapkCascades</span></span></code>] a dictionary containing some sub-dictionaries in which the annotations for each cycle are given as references.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>[<code class="code python py docutils literal notranslate"><span class="name"><span class="pre">connectivityMatrixx</span></span></code>] the connectivity matrix (a list) for one MAPK cycle.</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>[<code class="code python py docutils literal notranslate"><span class="name"><span class="pre">mergeableComponents</span></span></code>] a list of potential mergeable components along with their corresponding junctions.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>[<code class="code python py docutils literal notranslate"><span class="name"><span class="pre">Components</span></span></code>] a dictionary containing the symbolic bond graph components for each inserted module</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>[<code class="code python py docutils literal notranslate"><span class="name"><span class="pre">newAnnot</span></span></code>] a dictionary containing the annotations in the CellML files in which the keys are substituted with the identified cycle numbers.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<p>Figure 4 shows how <code class="docutils literal notranslate"><span class="pre">newAnnot</span></code> (the output of the <code class="docutils literal notranslate"><span class="pre">mapkModelMaker</span></code>) is generated by the cycle detection script in <code class="docutils literal notranslate"><span class="pre">mapkModelMaker</span></code> function.</p>
+<div class="align-center figure" id="id7">
+<a class="reference internal image-reference" href="_images/cycle_detection.jpg"><img alt="alternate text" src="_images/cycle_detection.jpg" style="width: 750px; height: 1000px;" /></a>
+<p class="caption"><span class="caption-text">Figure 4. Cycle detection role in the <code class="docutils literal notranslate"><span class="pre">mapkModelMaker</span></code> function.</span><a class="headerlink" href="#id7" title="Permalink to this image">¶</a></p>
+</div>
+<dl class="function">
+<dt id="checkMutual">
+<code class="sig-name descname">checkMutual</code><span class="sig-paren">(</span><em class="sig-param">category</em>, <em class="sig-param">annotations</em>, <em class="sig-param">List</em>, <em class="sig-param">els</em>, <em class="sig-param">init</em><span class="sig-paren">)</span><a class="headerlink" href="#checkMutual" title="Permalink to this definition">¶</a></dt>
+<dd><p>Checking for similar annotations among the models. If the variables with the same annotations have the same values the function ignores them. Otherwise, it asks the user to choose just one value for the two same variables. If no amount is inserted by the user, the function arbitarary deletes one of them.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>category</strong> – a list of the names of the categories which each model corresponds to.</p></li>
+<li><p><strong>annotations</strong> – a dictionary containing the annotations for each model (keys are the cycle numbers).</p></li>
+<li><p><strong>List</strong> – list of variable names corresponding to the annotations in order of the “annotations” dictionary.</p></li>
+<li><p><strong>els</strong> – a dictionary containing the names of the variables in the CellML files (in the order of the  found initial amounts).</p></li>
+<li><p><strong>init</strong> – a dictionary containing the initial amounts of the variables in the CellML files.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>[<code class="code python py docutils literal notranslate"><span class="name"><span class="pre">commonAnnots</span></span></code>] common annotations found among the models. Keys will be the pairs of cycles’ numbers (k1,k2).</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>[<code class="code python py docutils literal notranslate"><span class="name"><span class="pre">init</span></span></code>] The modified dictionary of the initial values.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p><code class="code python py docutils literal notranslate"><span class="name"><span class="pre">annotations</span></span></code> and <code class="code python py docutils literal notranslate"><span class="name"><span class="pre">List</span></span></code> have the same order of elements.</p>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p><code class="code python py docutils literal notranslate"><span class="name"><span class="pre">els</span></span></code> and <code class="code python py docutils literal notranslate"><span class="name"><span class="pre">init</span></span></code> have the same order of elements.</p>
+</div>
+<p>Figure 5 depicts the workflow of the <code class="docutils literal notranslate"><span class="pre">checkMutual</span></code> fucntion.</p>
+<div class="align-center figure" id="id8">
+<a class="reference internal image-reference" href="_images/checkMutual.jpg"><img alt="alternate text" src="_images/checkMutual.jpg" style="width: 500px; height: 900px;" /></a>
+<p class="caption"><span class="caption-text">Figure 5. The workflow of the <code class="docutils literal notranslate"><span class="pre">checkMutual</span></code> fucntion and how the mutual annotations are dealt with.</span><a class="headerlink" href="#id8" title="Permalink to this image">¶</a></p>
+</div>
+<p>The following script shows how the function finds common annotations, gives the corresponding cycles (<code class="code python py docutils literal notranslate"><span class="punctuation"><span class="pre">(</span></span><span class="literal number integer"><span class="pre">0</span></span><span class="punctuation"><span class="pre">,</span></span><span class="literal number integer"><span class="pre">1</span></span><span class="punctuation"><span class="pre">)</span></span></code>), and the different values (<code class="code python py docutils literal notranslate"><span class="literal number float"><span class="pre">0.35</span></span> <span class="operator word"><span class="pre">and</span></span> <span class="literal number float"><span class="pre">0.77</span></span></code>). The preferred value can be either of the found values or any other amount.</p>
+<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="p">[</span><span class="n">commonAnnots</span><span class="p">,</span><span class="n">initialsMAPK</span><span class="p">]</span><span class="o">=</span> <span class="n">checkMutual</span><span class="p">(</span><span class="n">categories</span><span class="p">,</span><span class="n">annotationsMAPK</span><span class="p">,</span><span class="n">listMAPK</span><span class="p">,</span><span class="n">elementsMAPK</span><span class="p">,</span><span class="n">initialsMAPK</span><span class="p">)</span>
+
+<span class="n">Different</span> <span class="n">values</span> <span class="n">found</span> <span class="k">for</span><span class="p">:</span>
+
+<span class="p">[</span><span class="s1">&#39;concentration of chemical&#39;</span><span class="p">,</span> <span class="s1">&#39;thermodynamic constant&#39;</span><span class="p">,</span> <span class="s1">&#39;activation of mapkkk activity&#39;</span><span class="p">],</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">)</span> <span class="p">:</span> <span class="mf">0.35</span> <span class="ow">and</span> <span class="mf">0.77</span>
+
+<span class="n">Enter</span> <span class="n">the</span> <span class="n">preferred</span> <span class="n">value</span><span class="p">:</span> <span class="mf">0.77</span>
+</pre></div>
+</div>
+<dl class="function">
+<dt id="componentConnectivityMatrixRemove">
+<code class="sig-name descname">componentConnectivityMatrixRemove</code><span class="sig-paren">(</span><em class="sig-param">commonAnnots</em>, <em class="sig-param">mergeableComponents</em>, <em class="sig-param">Components</em>, <em class="sig-param">connectivityMatrixx</em>, <em class="sig-param">model</em><span class="sig-paren">)</span><a class="headerlink" href="#componentConnectivityMatrixRemove" title="Permalink to this definition">¶</a></dt>
+<dd><p>Deleting the extra components which have similar annotations by knowing the cycle number that they belong to. By having the cycle numbers here, we exactly know which component is deleted from which model. We need to delete <em>n-1</em> of each <em>n</em> same components throughout the models and keep one.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>commonAnnots</strong> – a list of common annotations found among the models.</p></li>
+<li><p><strong>mergeableComponents</strong> – a list of potential mergeable components along with their corresponding junctions.</p></li>
+<li><p><strong>Components</strong> – a dictionary containing the default bond graph components for each module.</p></li>
+<li><p><strong>connectivityMatrixx</strong> – the connectivity matrix (a list) for one MAPK cycle.</p></li>
+<li><p><strong>model</strong> – the bond graph model (no components added yet).</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>[<code class="code python py docutils literal notranslate"><span class="name"><span class="pre">jointComps</span></span></code>] a list containing the single components to keep from each set of mutual components.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>[<code class="code python py docutils literal notranslate"><span class="name"><span class="pre">model</span></span></code>] the bond graph model (modified list of components added).</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>[<code class="code python py docutils literal notranslate"><span class="name"><span class="pre">Components</span></span></code>] a dictionary including the modified components list for each module.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>[<code class="code python py docutils literal notranslate"><span class="name"><span class="pre">initialCMs</span></span></code>] a dictionary including all the connectvity matrices of the modules. It is modified according to the removed components.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<p>Figure 6 demonstrates the procedure of modifying the list of components and the connectivity matrix according to the identified similar annotations between the cycles.</p>
+<div class="align-center figure" id="id9">
+<a class="reference internal image-reference" href="_images/CompCMremove.jpg"><img alt="alternate text" src="_images/CompCMremove.jpg" style="width: 600px; height: 900px;" /></a>
+<p class="caption"><span class="caption-text">Figure 6. The procedure of modifying the list of components and the connectivity matrix. This is acheived by identifying the similar annotations between the cycles.</span><a class="headerlink" href="#id9" title="Permalink to this image">¶</a></p>
+</div>
+<dl class="function">
+<dt id="valueAllocation">
+<code class="sig-name descname">valueAllocation</code><span class="sig-paren">(</span><em class="sig-param">annotations</em>, <em class="sig-param">mapkCascades</em>, <em class="sig-param">List</em>, <em class="sig-param">els</em>, <em class="sig-param">init</em>, <em class="sig-param">Model</em><span class="sig-paren">)</span><a class="headerlink" href="#valueAllocation" title="Permalink to this definition">¶</a></dt>
+<dd><p>Passing the values to the bond graph components regarding the annotations. Matching with the ones that have already been given in the mapkCascades dictionary for each cycle.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>annotations</strong> – a dictionary containing the annotations for each model (keys are the cycle numbers).</p></li>
+<li><p><strong>mapkCascades</strong> – the <code class="code python py docutils literal notranslate"><span class="name"><span class="pre">mapkCascades</span></span></code> dictionary contains the sub-dictionaries in which the annotations for each cycle are given as references.</p></li>
+<li><p><strong>List</strong> – list of variable corresponding to the annotations in order of the <code class="code python py docutils literal notranslate"><span class="name"><span class="pre">annotations</span></span></code> dictionary.</p></li>
+<li><p><strong>els</strong> – a dictionary containing the names of the variables in the CellML files (in the order of the initial values).</p></li>
+<li><p><strong>init</strong> – a dictionary containing the initial values of the variables in the CellML files.</p></li>
+<li><p><strong>Model</strong> – the bond graph model which now all the required components are added to.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>[<code class="code python py docutils literal notranslate"><span class="name"><span class="pre">stateVarsInitials</span></span></code>] a list containing the annotations and initial values for the “state variables”.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="componentsListConnectivityMatrix">
+<code class="sig-name descname">componentsListConnectivityMatrix</code><span class="sig-paren">(</span><em class="sig-param">Components</em><span class="sig-paren">)</span><a class="headerlink" href="#componentsListConnectivityMatrix" title="Permalink to this definition">¶</a></dt>
+<dd><p>Ordering the modified components of the modules in ONE list. The order is the same as in the connectivity matrix in which the rows and columns represent the connections for each component.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>Components</strong> – the dictionary including the modified components list for each module.</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>[<code class="code python py docutils literal notranslate"><span class="name"><span class="pre">connectivityBondsRow</span></span></code>] a list containing all the components of the modules. Based on the order of the components in this list, the connections between the components and modules will be made using the ‘0’s and ‘1’s in the connectivity matrix.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="connectivityWhole">
+<code class="sig-name descname">connectivityWhole</code><span class="sig-paren">(</span><em class="sig-param">initialCMs</em><span class="sig-paren">)</span><a class="headerlink" href="#connectivityWhole" title="Permalink to this definition">¶</a></dt>
+<dd><p>In this function all the modified connectivity matrices of the modules are combined in one matrix.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>initialCMs</strong> – a dictionary including all the modified connectvity matrices of the modules.</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>[<code class="code python py docutils literal notranslate"><span class="name"><span class="pre">connectivityMatrixWhole</span></span></code>] a matrix in which all the connectivity matrices are put together diagonally. All other elements of the matrix will remain zero.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="addOnesModuleCompos">
+<code class="sig-name descname">addOnesModuleCompos</code><span class="sig-paren">(</span><em class="sig-param">initialCMs</em>, <em class="sig-param">jointComps</em>, <em class="sig-param">connectivityBondsRow</em>, <em class="sig-param">connectivityMatrixWhole</em><span class="sig-paren">)</span><a class="headerlink" href="#addOnesModuleCompos" title="Permalink to this definition">¶</a></dt>
+<dd><p>Inserting “1”s in the whole connectivity matrix for connections between the modules based on the saved components in <code class="code python py docutils literal notranslate"><span class="name"><span class="pre">jointComps</span></span></code>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>initialCMs</strong> – a dictionary including all the modified connectvity matrices of the modules.</p></li>
+<li><p><strong>jointComps</strong> – a list containing the single components to keep from each set of mutual components.</p></li>
+<li><p><strong>connectivityBondsRow</strong> – a list containing the whole components of the modules. Based on the order of the components in this list, the connections between the components and modules will be made using the elements of the connectivity matrix.</p></li>
+<li><p><strong>connectivityMatrixWhole</strong> – a matrix in which all the connectivity matrices are put together diagonally.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>[<code class="code python py docutils literal notranslate"><span class="name"><span class="pre">connectivityMatrixWhole</span></span></code>] modified final connectivity matrix with the “1”s added for making connections between the mutual components of the modules.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<p>Figure 7 displays how the modified connectivity matrices of the cycles (modules) are put together in one matrix using the <code class="docutils literal notranslate"><span class="pre">connectivityWhole</span></code> function and then additional ‘1’s are added to the matrix to represent the connections between the modules’ components (<code class="docutils literal notranslate"><span class="pre">addOnesModuleCompos</span></code> function).</p>
+<div class="align-center figure" id="id10">
+<a class="reference internal image-reference" href="_images/cmWhole.png"><img alt="alternate text" src="_images/cmWhole.png" style="width: 700px; height: 700px;" /></a>
+<p class="caption"><span class="caption-text">Figure 7. Creation of the final connectivity matrix. The final matrix both shows the connections between the components of each module and any connections between the modules.</span><a class="headerlink" href="#id10" title="Permalink to this image">¶</a></p>
+</div>
+<dl class="function">
+<dt id="BondsConnection">
+<code class="sig-name descname">BondsConnection</code><span class="sig-paren">(</span><em class="sig-param">connectivityMatrixWhole</em>, <em class="sig-param">connectivityBondsRow</em><span class="sig-paren">)</span><a class="headerlink" href="#BondsConnection" title="Permalink to this definition">¶</a></dt>
+<dd><p>Making the bond graph connections (bonds) between the components based on the final connectivity matrix.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>connectivityMatrixWhole</strong> – the final connectivity matrix.</p></li>
+<li><p><strong>connectivityBondsRow</strong> – a list containing all the components of the modules.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>[<code class="code python py docutils literal notranslate"><span class="name"><span class="pre">model</span></span></code>] the bond graph model in which the connections between the components as well as the modules has been made.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="stateVarsValues">
+<code class="sig-name descname">stateVarsValues</code><span class="sig-paren">(</span><em class="sig-param">model</em>, <em class="sig-param">stateVarsInitials</em><span class="sig-paren">)</span><a class="headerlink" href="#stateVarsValues" title="Permalink to this definition">¶</a></dt>
+<dd><p>Matching the model’s state variable default names with the annotations and values saved in <code class="code python py docutils literal notranslate"><span class="name"><span class="pre">stateVarsInitials</span></span></code>. Then, passing the values to the corresponding state variables.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>model</strong> – the bond graph model.</p></li>
+<li><p><strong>stateVarsInitials</strong> – a list containing the annotations and initial values for the state variables.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>[<code class="code python py docutils literal notranslate"><span class="name"><span class="pre">x0Values</span></span></code>] a list of ordered initial values for the state variables (ordering based on the state variables’ annotations).</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="combineDict">
+<code class="sig-name descname">combineDict</code><span class="sig-paren">(</span><em class="sig-param">x0Values</em><span class="sig-paren">)</span><a class="headerlink" href="#combineDict" title="Permalink to this definition">¶</a></dt>
+<dd><p>Combining the initial values of the state variables in the format acceptable in BondGraphTools i.e. <code class="code python py docutils literal notranslate"><span class="punctuation"><span class="pre">{</span></span><span class="literal string single"><span class="pre">‘x_0’</span></span><span class="punctuation"><span class="pre">:</span></span><span class="name"><span class="pre">value_0</span></span><span class="punctuation"><span class="pre">,</span></span> <span class="literal string single"><span class="pre">‘x_1’</span></span><span class="punctuation"><span class="pre">:</span></span><span class="name"><span class="pre">value_1</span></span><span class="punctuation"><span class="pre">,</span></span> <span class="operator"><span class="pre">…</span></span><span class="punctuation"><span class="pre">}</span></span></code>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>x0Values</strong> – A list of ordered initial values for the state variables (ordered based on the state variables’ annotations).</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>[<code class="code python py docutils literal notranslate"><span class="name"><span class="pre">x_0</span></span></code>] a dictionary including the state variables along with the values gained from the input(<code class="code python py docutils literal notranslate"><span class="name"><span class="pre">x0Values</span></span></code>).</p>
+</dd>
+</dl>
+</dd></dl>
+
+<p>We can run the simulation in BondGraphTools using <code class="code python py docutils literal notranslate"><span class="name"><span class="pre">bgt</span></span><span class="operator"><span class="pre">.</span></span><span class="name"><span class="pre">simulate</span></span></code>. Here, we have no control variables.</p>
+<dl class="function">
+<dt id="bgt.simulate">
+<code class="sig-prename descclassname">bgt.</code><code class="sig-name descname">simulate</code><span class="sig-paren">(</span><em class="sig-param">model</em>, <em class="sig-param">timespan</em>, <em class="sig-param">control_vars</em>, <em class="sig-param">x0</em>, <em class="sig-param">dt</em><span class="sig-paren">)</span><a class="headerlink" href="#bgt.simulate" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>model</strong> – the bond graph model.</p></li>
+<li><p><strong>timespan</strong> – the time interval for simulation.</p></li>
+<li><p><strong>control_vars</strong> – gives values to any variable/parameter which has remained symbolic as control variable.</p></li>
+<li><p><strong>x0</strong> – a dictionary with the state variables and their values.</p></li>
+<li><p><strong>dt</strong> – the time steps for solving the constitutive equations of the model.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>[<code class="code python py docutils literal notranslate"><span class="name"><span class="pre">t</span></span></code>] a list containing the time points.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>[<code class="code python py docutils literal notranslate"><span class="name"><span class="pre">x</span></span></code>] an array containing the values for the state variables over time.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="n">t_span</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">100</span><span class="p">]</span>
+<span class="n">t</span><span class="p">,</span> <span class="n">x</span> <span class="o">=</span> <span class="n">bgt</span><span class="o">.</span><span class="n">simulate</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">timespan</span><span class="o">=</span><span class="n">t_span</span><span class="p">,</span> <span class="n">control_vars</span><span class="o">=</span><span class="p">{},</span> <span class="n">x0</span><span class="o">=</span><span class="n">x_0</span><span class="p">,</span> <span class="n">dt</span><span class="o">=</span><span class="mf">0.1</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>To plot the simulation results, check the annotation and number of the state variables using <code class="code python py docutils literal notranslate"><span class="name"><span class="pre">model</span></span><span class="operator"><span class="pre">.</span></span><span class="name"><span class="pre">state_vars</span></span></code>. Here, three state variables accompanied by their annotations are shown by calling <code class="code python py docutils literal notranslate"><span class="name"><span class="pre">model</span></span><span class="operator"><span class="pre">.</span></span><span class="name"><span class="pre">state_vars</span></span></code>.</p>
+<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span> <span class="n">model</span><span class="o">.</span><span class="n">state_vars</span>
+ <span class="p">{</span><span class="s1">&#39;x_0&#39;</span><span class="p">:</span> <span class="p">(</span><span class="n">C</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;concentration of chemical&#39;</span><span class="p">,</span> <span class="s1">&#39;map kinase kinase kinase kinase activity&#39;</span><span class="p">},</span>
+<span class="s1">&#39;q_0&#39;</span><span class="p">),</span>
+  <span class="s1">&#39;x_1&#39;</span><span class="p">:</span> <span class="p">(</span><span class="n">C</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;concentration of chemical&#39;</span><span class="p">,</span> <span class="s1">&#39;map kinase phosphatase activity&#39;</span><span class="p">},</span>
+<span class="s1">&#39;q_0&#39;</span><span class="p">),</span>
+  <span class="s1">&#39;x_2&#39;</span><span class="p">:</span> <span class="p">(</span><span class="n">C</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;concentration of chemical&#39;</span><span class="p">,</span> <span class="s1">&#39;protein phosphorylation&#39;</span><span class="p">},</span> <span class="s1">&#39;q_0&#39;</span><span class="p">),</span>
+  <span class="o">...</span><span class="p">}</span>
+</pre></div>
+</div>
+<p>The order of the state variables changes if you change the order of inserting the CellML files. Make sure you are selecting the correct state variable by observing their annotations in <code class="code python py docutils literal notranslate"><span class="name"><span class="pre">model</span></span><span class="operator"><span class="pre">.</span></span><span class="name"><span class="pre">state_vars</span></span></code>.</p>
+<p>In this documentation, five sets of graphs are demonstrated. Figure 8 displays the concentration changes of the Input Kinase (MKKKK).</p>
+<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="n">rcParams</span><span class="p">[</span><span class="s1">&#39;figure.figsize&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">9</span><span class="p">,</span> <span class="mi">6</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">rcParams</span><span class="p">[</span><span class="s1">&#39;axes.facecolor&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;floralwhite&#39;</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">rc</span><span class="p">(</span><span class="s1">&#39;axes&#39;</span><span class="p">,</span><span class="n">edgecolor</span><span class="o">=</span><span class="s1">&#39;peachpuff&#39;</span><span class="p">)</span>
+
+<span class="n">font</span> <span class="o">=</span> <span class="n">font_manager</span><span class="o">.</span><span class="n">FontProperties</span><span class="p">(</span><span class="n">family</span><span class="o">=</span><span class="s1">&#39;Times New Roman&#39;</span><span class="p">,</span>
+                                   <span class="n">weight</span><span class="o">=</span><span class="s1">&#39;bold&#39;</span><span class="p">,</span>
+                                   <span class="n">style</span><span class="o">=</span><span class="s1">&#39;normal&#39;</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="mi">11</span><span class="p">)</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">t</span><span class="p">,</span><span class="n">x</span><span class="p">[:,</span><span class="mi">0</span><span class="p">],</span><span class="s1">&#39;goldenrod&#39;</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="s1">&#39;5&#39;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;MKKKK&#39;</span><span class="o">+</span><span class="s1">&#39; &#39;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="n">model</span><span class="o">.</span><span class="n">state_vars</span><span class="o">.</span><span class="n">values</span><span class="p">())[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">name</span><span class="p">))</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">bbox_to_anchor</span><span class="o">=</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span> <span class="n">prop</span><span class="o">=</span><span class="n">font</span> <span class="p">)</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">grid</span><span class="p">(</span><span class="n">color</span><span class="o">=</span><span class="s1">&#39;peachpuff&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s1">&#39;Time (ms)&#39;</span><span class="p">,</span> <span class="n">fontweight</span><span class="o">=</span><span class="s1">&#39;bold&#39;</span><span class="p">,</span><span class="n">family</span><span class="o">=</span><span class="s1">&#39;Times New Roman&#39;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">15</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s1">&#39;Concentration (mmol)&#39;</span><span class="p">,</span> <span class="n">fontweight</span><span class="o">=</span><span class="s1">&#39;bold&#39;</span><span class="p">,</span><span class="n">family</span><span class="o">=</span><span class="s1">&#39;Times New Roman&#39;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">15</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>According to the output of <code class="code python py docutils literal notranslate"><span class="name"><span class="pre">model</span></span><span class="operator"><span class="pre">.</span></span><span class="name"><span class="pre">state_vars</span></span></code>, the corresponding state variable for MKKKK is <code class="code python py docutils literal notranslate"><span class="name"><span class="pre">x_0</span></span></code>. So, <code class="code python py docutils literal notranslate"><span class="name"><span class="pre">x</span></span><span class="punctuation"><span class="pre">[:,</span></span><span class="literal number integer"><span class="pre">0</span></span><span class="punctuation"><span class="pre">]</span></span></code> is selected for plotting.</p>
+</div>
+<div class="align-center figure" id="id11">
+<a class="reference internal image-reference" href="_images/mkkkk.png"><img alt="alternate text" src="_images/mkkkk.png" style="width: 700px; height: 430px;" /></a>
+<p class="caption"><span class="caption-text">Figure 8. Concentration changes of the Input Kinase (MKKKK).</span><a class="headerlink" href="#id11" title="Permalink to this image">¶</a></p>
+</div>
+<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="n">rcParams</span><span class="p">[</span><span class="s1">&#39;figure.figsize&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">9</span><span class="p">,</span> <span class="mi">6</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">rcParams</span><span class="p">[</span><span class="s1">&#39;axes.facecolor&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;floralwhite&#39;</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">rc</span><span class="p">(</span><span class="s1">&#39;axes&#39;</span><span class="p">,</span><span class="n">edgecolor</span><span class="o">=</span><span class="s1">&#39;peachpuff&#39;</span><span class="p">)</span>
+<span class="n">font</span> <span class="o">=</span> <span class="n">font_manager</span><span class="o">.</span><span class="n">FontProperties</span><span class="p">(</span><span class="n">family</span><span class="o">=</span><span class="s1">&#39;Times New Roman&#39;</span><span class="p">,</span>
+                                <span class="n">weight</span><span class="o">=</span><span class="s1">&#39;bold&#39;</span><span class="p">,</span>
+                                <span class="n">style</span><span class="o">=</span><span class="s1">&#39;normal&#39;</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="mi">11</span><span class="p">)</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">t</span><span class="p">,</span><span class="n">x</span><span class="p">[:,</span><span class="mi">4</span><span class="p">],</span><span class="s1">&#39;steelblue&#39;</span><span class="p">,</span><span class="n">marker</span><span class="o">=</span> <span class="s1">&#39;o&#39;</span><span class="p">,</span><span class="n">markevery</span><span class="o">=</span><span class="mi">50</span><span class="p">,</span><span class="n">ms</span><span class="o">=</span><span class="mi">6</span><span class="p">,</span><span class="n">linestyle</span><span class="o">=</span><span class="s1">&#39;--&#39;</span><span class="p">,</span><span class="n">linewidth</span><span class="o">=</span><span class="mf">2.5</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;MKKK&#39;</span><span class="o">+</span><span class="s1">&#39; &#39;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="n">model</span><span class="o">.</span><span class="n">state_vars</span><span class="o">.</span><span class="n">values</span><span class="p">())[</span><span class="mi">4</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">name</span><span class="p">))</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">t</span><span class="p">,</span><span class="n">x</span><span class="p">[:,</span><span class="mi">5</span><span class="p">],</span><span class="s1">&#39;lightcoral&#39;</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;MKKKP&#39;</span><span class="o">+</span><span class="s1">&#39; &#39;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="n">model</span><span class="o">.</span><span class="n">state_vars</span><span class="o">.</span><span class="n">values</span><span class="p">())[</span><span class="mi">5</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">name</span><span class="p">))</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">bbox_to_anchor</span><span class="o">=</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">8</span><span class="p">,</span> <span class="n">prop</span><span class="o">=</span><span class="n">font</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">grid</span><span class="p">(</span><span class="n">color</span><span class="o">=</span><span class="s1">&#39;peachpuff&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s1">&#39;Time (ms)&#39;</span><span class="p">,</span> <span class="n">fontweight</span><span class="o">=</span><span class="s1">&#39;bold&#39;</span><span class="p">,</span><span class="n">family</span><span class="o">=</span><span class="s1">&#39;Times New Roman&#39;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">15</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s1">&#39;Concentration (mmol)&#39;</span><span class="p">,</span> <span class="n">fontweight</span><span class="o">=</span><span class="s1">&#39;bold&#39;</span><span class="p">,</span><span class="n">family</span><span class="o">=</span><span class="s1">&#39;Times New Roman&#39;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">15</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="align-center figure" id="id12">
+<a class="reference internal image-reference" href="_images/mkkk_mkkkp.png"><img alt="alternate text" src="_images/mkkk_mkkkp.png" style="width: 700px; height: 460px;" /></a>
+<p class="caption"><span class="caption-text">Figure 9. Concentration changes of MKKK and MKKKP.</span><a class="headerlink" href="#id12" title="Permalink to this image">¶</a></p>
+</div>
+<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="n">rcParams</span><span class="p">[</span><span class="s1">&#39;figure.figsize&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">9</span><span class="p">,</span> <span class="mi">6</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">rcParams</span><span class="p">[</span><span class="s1">&#39;axes.facecolor&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;floralwhite&#39;</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">rc</span><span class="p">(</span><span class="s1">&#39;axes&#39;</span><span class="p">,</span><span class="n">edgecolor</span><span class="o">=</span><span class="s1">&#39;peachpuff&#39;</span><span class="p">)</span>
+<span class="n">font</span> <span class="o">=</span> <span class="n">font_manager</span><span class="o">.</span><span class="n">FontProperties</span><span class="p">(</span><span class="n">family</span><span class="o">=</span><span class="s1">&#39;Times New Roman&#39;</span><span class="p">,</span>
+                                <span class="n">weight</span><span class="o">=</span><span class="s1">&#39;bold&#39;</span><span class="p">,</span>
+                                <span class="n">style</span><span class="o">=</span><span class="s1">&#39;normal&#39;</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="mi">11</span><span class="p">)</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">t</span><span class="p">,</span><span class="n">x</span><span class="p">[:,</span><span class="mi">12</span><span class="p">],</span><span class="s1">&#39;steelblue&#39;</span><span class="p">,</span><span class="n">marker</span><span class="o">=</span> <span class="s1">&#39;o&#39;</span><span class="p">,</span><span class="n">markevery</span><span class="o">=</span><span class="mi">50</span><span class="p">,</span><span class="n">ms</span><span class="o">=</span><span class="mi">6</span><span class="p">,</span><span class="n">linestyle</span><span class="o">=</span><span class="s1">&#39;--&#39;</span><span class="p">,</span><span class="n">linewidth</span><span class="o">=</span><span class="mf">2.5</span><span class="p">,</span><span class="n">label</span><span class="o">=</span><span class="s1">&#39;MKK&#39;</span><span class="o">+</span><span class="s1">&#39; &#39;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="n">model</span><span class="o">.</span><span class="n">state_vars</span><span class="o">.</span><span class="n">values</span><span class="p">())[</span><span class="mi">12</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">name</span><span class="p">))</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">t</span><span class="p">,</span><span class="n">x</span><span class="p">[:,</span><span class="mi">13</span><span class="p">],</span><span class="s1">&#39;lightcoral&#39;</span><span class="p">,</span><span class="n">linewidth</span><span class="o">=</span><span class="mi">5</span> <span class="p">,</span><span class="n">label</span><span class="o">=</span><span class="s1">&#39;MKKP&#39;</span><span class="o">+</span><span class="s1">&#39; &#39;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="n">model</span><span class="o">.</span><span class="n">state_vars</span><span class="o">.</span><span class="n">values</span><span class="p">())[</span><span class="mi">13</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">name</span><span class="p">))</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">t</span><span class="p">,</span><span class="n">x</span><span class="p">[:,</span><span class="mi">16</span><span class="p">],</span><span class="s1">&#39;maroon&#39;</span><span class="p">,</span><span class="n">marker</span><span class="o">=</span> <span class="s1">&#39;^&#39;</span><span class="p">,</span><span class="n">markevery</span><span class="o">=</span><span class="mi">50</span><span class="p">,</span><span class="n">ms</span><span class="o">=</span><span class="mi">7</span><span class="p">,</span><span class="n">linestyle</span><span class="o">=</span><span class="s1">&#39;:&#39;</span><span class="p">,</span><span class="n">linewidth</span><span class="o">=</span><span class="mf">2.5</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;MKKPP&#39;</span><span class="o">+</span><span class="s1">&#39; &#39;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="n">model</span><span class="o">.</span><span class="n">state_vars</span><span class="o">.</span><span class="n">values</span><span class="p">())[</span><span class="mi">16</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">name</span><span class="p">))</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">loc</span><span class="o">=</span><span class="s1">&#39;upper center&#39;</span><span class="p">,</span><span class="n">bbox_to_anchor</span><span class="o">=</span><span class="p">(</span><span class="mf">0.51</span><span class="p">,</span> <span class="mf">1.18</span><span class="p">),</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">8</span><span class="p">,</span> <span class="n">prop</span><span class="o">=</span><span class="n">font</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">grid</span><span class="p">(</span><span class="n">color</span><span class="o">=</span><span class="s1">&#39;peachpuff&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s1">&#39;Time (ms)&#39;</span><span class="p">,</span> <span class="n">fontweight</span><span class="o">=</span><span class="s1">&#39;bold&#39;</span><span class="p">,</span><span class="n">family</span><span class="o">=</span><span class="s1">&#39;Times New Roman&#39;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">15</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s1">&#39;Concentration (mmol)&#39;</span><span class="p">,</span><span class="n">fontweight</span><span class="o">=</span><span class="s1">&#39;bold&#39;</span><span class="p">,</span><span class="n">family</span><span class="o">=</span><span class="s1">&#39;Times New Roman&#39;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">15</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="align-center figure" id="id13">
+<a class="reference internal image-reference" href="_images/mkk_mkkp_mkkpp.png"><img alt="alternate text" src="_images/mkk_mkkp_mkkpp.png" style="width: 700px; height: 460px;" /></a>
+<p class="caption"><span class="caption-text">Figure 10. Concentration changes of MKK, MKKP, and MKKPP.</span><a class="headerlink" href="#id13" title="Permalink to this image">¶</a></p>
+</div>
+<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="n">rcParams</span><span class="p">[</span><span class="s1">&#39;figure.figsize&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">8</span><span class="p">,</span> <span class="mi">6</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">rcParams</span><span class="p">[</span><span class="s1">&#39;axes.facecolor&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;floralwhite&#39;</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">rc</span><span class="p">(</span><span class="s1">&#39;axes&#39;</span><span class="p">,</span><span class="n">edgecolor</span><span class="o">=</span><span class="s1">&#39;peachpuff&#39;</span><span class="p">)</span>
+<span class="n">font</span> <span class="o">=</span> <span class="n">font_manager</span><span class="o">.</span><span class="n">FontProperties</span><span class="p">(</span><span class="n">family</span><span class="o">=</span><span class="s1">&#39;Times New Roman&#39;</span><span class="p">,</span>
+                                <span class="n">weight</span><span class="o">=</span><span class="s1">&#39;bold&#39;</span><span class="p">,</span>
+                                <span class="n">style</span><span class="o">=</span><span class="s1">&#39;normal&#39;</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="mi">11</span><span class="p">)</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">t</span><span class="p">,</span><span class="n">x</span><span class="p">[:,</span><span class="mi">20</span><span class="p">],</span><span class="s1">&#39;steelblue&#39;</span><span class="p">,</span><span class="n">marker</span><span class="o">=</span> <span class="s1">&#39;o&#39;</span><span class="p">,</span><span class="n">markevery</span><span class="o">=</span><span class="mi">50</span><span class="p">,</span><span class="n">ms</span><span class="o">=</span><span class="mi">6</span><span class="p">,</span><span class="n">linewidth</span><span class="o">=</span><span class="mf">2.5</span><span class="p">,</span> <span class="n">linestyle</span><span class="o">=</span><span class="s1">&#39;--&#39;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;MK&#39;</span><span class="o">+</span><span class="s1">&#39; &#39;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="n">model</span><span class="o">.</span><span class="n">state_vars</span><span class="o">.</span><span class="n">values</span><span class="p">())[</span><span class="mi">20</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">name</span><span class="p">))</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">t</span><span class="p">,</span><span class="n">x</span><span class="p">[:,</span><span class="mi">21</span><span class="p">],</span><span class="s1">&#39;lightcoral&#39;</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="s1">&#39;5&#39;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;MKP&#39;</span><span class="o">+</span><span class="s1">&#39; &#39;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="n">model</span><span class="o">.</span><span class="n">state_vars</span><span class="o">.</span><span class="n">values</span><span class="p">())[</span><span class="mi">21</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">name</span><span class="p">))</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">t</span><span class="p">,</span><span class="n">x</span><span class="p">[:,</span><span class="mi">24</span><span class="p">],</span><span class="s1">&#39;maroon&#39;</span><span class="p">,</span><span class="n">marker</span><span class="o">=</span> <span class="s1">&#39;^&#39;</span><span class="p">,</span><span class="n">markevery</span><span class="o">=</span><span class="mi">50</span><span class="p">,</span><span class="n">ms</span><span class="o">=</span><span class="mi">7</span><span class="p">,</span><span class="n">linestyle</span><span class="o">=</span><span class="s1">&#39;:&#39;</span><span class="p">,</span><span class="n">linewidth</span><span class="o">=</span><span class="mf">2.5</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;MKPP&#39;</span><span class="o">+</span><span class="s1">&#39; &#39;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="n">model</span><span class="o">.</span><span class="n">state_vars</span><span class="o">.</span><span class="n">values</span><span class="p">())[</span><span class="mi">24</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">name</span><span class="p">))</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">loc</span><span class="o">=</span><span class="s1">&#39;upper center&#39;</span><span class="p">,</span><span class="n">bbox_to_anchor</span><span class="o">=</span><span class="p">(</span><span class="mf">0.51</span><span class="p">,</span> <span class="mf">1.18</span><span class="p">),</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">8</span><span class="p">,</span> <span class="n">prop</span><span class="o">=</span><span class="n">font</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">grid</span><span class="p">(</span><span class="n">color</span><span class="o">=</span><span class="s1">&#39;peachpuff&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s1">&#39;Time (ms)&#39;</span><span class="p">,</span> <span class="n">fontweight</span><span class="o">=</span><span class="s1">&#39;bold&#39;</span><span class="p">,</span><span class="n">family</span><span class="o">=</span><span class="s1">&#39;Times New Roman&#39;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">15</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s1">&#39;Concentration (mmol)&#39;</span><span class="p">,</span><span class="n">fontweight</span><span class="o">=</span><span class="s1">&#39;bold&#39;</span><span class="p">,</span><span class="n">family</span><span class="o">=</span><span class="s1">&#39;Times New Roman&#39;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">15</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="align-center figure" id="id14">
+<a class="reference internal image-reference" href="_images/mk_mkp_mkpp.png"><img alt="alternate text" src="_images/mk_mkp_mkpp.png" style="width: 600px; height: 460px;" /></a>
+<p class="caption"><span class="caption-text">Figure 11. Concentration changes of MK, MKP, and MKPP.</span><a class="headerlink" href="#id14" title="Permalink to this image">¶</a></p>
+</div>
+<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="n">rcParams</span><span class="p">[</span><span class="s1">&#39;figure.figsize&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">9</span><span class="p">,</span> <span class="mi">6</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">rcParams</span><span class="p">[</span><span class="s1">&#39;axes.facecolor&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;floralwhite&#39;</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">rc</span><span class="p">(</span><span class="s1">&#39;axes&#39;</span><span class="p">,</span><span class="n">edgecolor</span><span class="o">=</span><span class="s1">&#39;peachpuff&#39;</span><span class="p">)</span>
+<span class="n">font</span> <span class="o">=</span> <span class="n">font_manager</span><span class="o">.</span><span class="n">FontProperties</span><span class="p">(</span><span class="n">family</span><span class="o">=</span><span class="s1">&#39;Times New Roman&#39;</span><span class="p">,</span>
+                                <span class="n">weight</span><span class="o">=</span><span class="s1">&#39;bold&#39;</span><span class="p">,</span>
+                                <span class="n">style</span><span class="o">=</span><span class="s1">&#39;normal&#39;</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="mi">11</span><span class="p">)</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">t</span><span class="p">,</span><span class="mi">100</span><span class="o">*</span><span class="n">x</span><span class="p">[:,</span><span class="mi">5</span><span class="p">]</span><span class="o">/</span><span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">4</span><span class="p">],</span><span class="s1">&#39;grey&#39;</span><span class="p">,</span><span class="n">marker</span><span class="o">=</span> <span class="s1">&#39;^&#39;</span><span class="p">,</span><span class="n">markevery</span><span class="o">=</span><span class="mi">60</span><span class="p">,</span><span class="n">ms</span><span class="o">=</span><span class="mi">7</span><span class="p">,</span><span class="n">linestyle</span><span class="o">=</span><span class="s1">&#39;--&#39;</span><span class="p">,</span><span class="n">linewidth</span><span class="o">=</span><span class="mf">2.5</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;MKKKP&#39;</span><span class="o">+</span><span class="s1">&#39; &#39;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="n">model</span><span class="o">.</span><span class="n">state_vars</span><span class="o">.</span><span class="n">values</span><span class="p">())[</span><span class="mi">5</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">name</span><span class="p">))</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">t</span><span class="p">,</span><span class="mi">100</span><span class="o">*</span><span class="n">x</span><span class="p">[:,</span><span class="mi">16</span><span class="p">]</span><span class="o">/</span><span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">12</span><span class="p">],</span><span class="s1">&#39;k&#39;</span><span class="p">,</span><span class="n">marker</span><span class="o">=</span> <span class="s1">&#39;o&#39;</span><span class="p">,</span><span class="n">markevery</span><span class="o">=</span><span class="mi">50</span><span class="p">,</span><span class="n">ms</span><span class="o">=</span><span class="mi">6</span><span class="p">,</span><span class="n">linestyle</span><span class="o">=</span><span class="s1">&#39;--&#39;</span><span class="p">,</span><span class="n">linewidth</span><span class="o">=</span><span class="mf">2.5</span><span class="p">,</span><span class="n">label</span><span class="o">=</span><span class="s1">&#39;MKKPP&#39;</span><span class="o">+</span><span class="s1">&#39; &#39;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="n">model</span><span class="o">.</span><span class="n">state_vars</span><span class="o">.</span><span class="n">values</span><span class="p">())[</span><span class="mi">16</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">name</span><span class="p">))</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">t</span><span class="p">,</span><span class="mi">100</span><span class="o">*</span><span class="n">x</span><span class="p">[:,</span><span class="mi">24</span><span class="p">]</span><span class="o">/</span><span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">20</span><span class="p">],</span><span class="s1">&#39;rosybrown&#39;</span><span class="p">,</span><span class="n">marker</span><span class="o">=</span> <span class="s1">&#39;*&#39;</span><span class="p">,</span><span class="n">markevery</span><span class="o">=</span><span class="mi">50</span><span class="p">,</span><span class="n">ms</span><span class="o">=</span><span class="mi">9</span><span class="p">,</span> <span class="n">linestyle</span><span class="o">=</span><span class="s1">&#39;--&#39;</span><span class="p">,</span><span class="n">linewidth</span><span class="o">=</span><span class="mf">2.5</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;MKPP&#39;</span><span class="o">+</span><span class="s1">&#39; &#39;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="n">model</span><span class="o">.</span><span class="n">state_vars</span><span class="o">.</span><span class="n">values</span><span class="p">())[</span><span class="mi">24</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">name</span><span class="p">))</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">loc</span><span class="o">=</span><span class="s1">&#39;upper center&#39;</span><span class="p">,</span><span class="n">bbox_to_anchor</span><span class="o">=</span><span class="p">(</span><span class="mf">0.50</span><span class="p">,</span> <span class="mf">1.18</span><span class="p">),</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">9</span><span class="p">,</span> <span class="n">prop</span><span class="o">=</span><span class="n">font</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">grid</span><span class="p">(</span><span class="n">color</span><span class="o">=</span><span class="s1">&#39;peachpuff&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s1">&#39;Time (ms)&#39;</span><span class="p">,</span> <span class="n">fontweight</span><span class="o">=</span><span class="s1">&#39;bold&#39;</span><span class="p">,</span><span class="n">family</span><span class="o">=</span><span class="s1">&#39;Times New Roman&#39;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">15</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s2">&quot;% Activation&quot;</span><span class="p">,</span> <span class="n">fontweight</span><span class="o">=</span><span class="s1">&#39;bold&#39;</span><span class="p">,</span><span class="n">family</span><span class="o">=</span><span class="s1">&#39;Times New Roman&#39;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">15</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="align-center figure" id="id15">
+<a class="reference internal image-reference" href="_images/activation.png"><img alt="alternate text" src="_images/activation.png" style="width: 700px; height: 460px;" /></a>
+<p class="caption"><span class="caption-text">Figure 12. Activation percentage for MKKKP, MKKPP, and MKPP.</span><a class="headerlink" href="#id15" title="Permalink to this image">¶</a></p>
+</div>
+<dl class="footnote brackets">
+<dt class="label" id="id2"><span class="brackets">1</span></dt>
+<dd><p>Sarma, U., &amp; Ghosh, I. (2012). Oscillations in MAPK cascade triggered by two distinct designs of coupled positive and negative feedback loops. <a class="reference external" href="http://www.biomedcentral.com/1756-0500/5/287">http://www.biomedcentral.com/1756-0500/5/287</a></p>
+</dd>
+<dt class="label" id="id3"><span class="brackets"><a class="fn-backref" href="#id1">2</a></span></dt>
+<dd><p>Pan, M. (2020). …………. <a class="reference external" href=".............">………….</a></p>
+</dd>
+</dl>
+</div>
+</div>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="index.html">Automated Model Composition</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="Introduction.html"><strong>Introduction</strong></a></li>
+<li class="toctree-l1"><a class="reference internal" href="The_approach.html"><strong>The Approach</strong></a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#"><strong>Mitogen-activated Protein Kinase (MAPK) Cascade</strong></a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#python-libraries">Python libraries</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#ontologies">Ontologies</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#functions">Functions</a></li>
+</ul>
+</li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="index.html">Documentation overview</a><ul>
+      <li>Previous: <a href="The_approach.html" title="previous chapter"><strong>The Approach</strong></a></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2020, Niloofar Shahidi.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 2.1.2</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+      |
+      <a href="_sources/mapk_Cascade.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>
