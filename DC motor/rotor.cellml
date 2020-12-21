@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<model xmlns="http://www.cellml.org/cellml/1.1#" xmlns:cmeta="http://www.cellml.org/metadata/1.0#" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:bqs="http://www.cellml.org/bqs/1.0#" xmlns:semsim="http://www.bhi.washington.edu/SemSim#" xmlns:dcterms="http://purl.org/dc/terms/" xmlns:vCard="http://www.w3.org/2001/vcard-rdf/3.0#" name="rotor" cmeta:id="metaid0">
+  <units name="Js_per_C">
+    <unit units="joule" />
+    <unit exponent="-1.0" units="coulomb" />
+    <unit units="second" />
+  </units>
+  <units name="J_per_C">
+    <unit exponent="-1.0" units="coulomb" />
+    <unit units="joule" />
+  </units>
+  <units name="C_per_s2">
+    <unit units="coulomb" />
+    <unit exponent="-2.0" units="second" />
+  </units>
+  <units name="C_per_s">
+    <unit units="coulomb" />
+    <unit exponent="-1.0" units="second" />
+  </units>
+  <units name="C2_per_J">
+    <unit exponent="-1.0" units="joule" />
+    <unit exponent="2.0" units="coulomb" />
+  </units>
+  <units name="Js2_per_C2">
+    <unit units="joule" />
+    <unit exponent="2.0" units="second" />
+    <unit exponent="-2.0" units="coulomb" />
+  </units>
+  <units name="Js_per_C_m">
+    <unit exponent="-1.0" units="coulomb" />
+    <unit units="second" />
+    <unit exponent="-1.0" units="metre" />
+    <unit units="joule" />
+  </units>
+  <units name="Js_per_C2">
+    <unit exponent="-2.0" units="coulomb" />
+    <unit units="joule" />
+    <unit units="second" />
+  </units>
+  <units name="J_per_m2">
+    <unit exponent="-2.0" units="metre" />
+    <unit units="joule" />
+  </units>
+  <component name="main">
+    <variable cmeta:id="main.Rm" initial_value="0.066" name="Rm" units="dimensionless" />
+    <variable cmeta:id="main.Im" initial_value="0.8" name="Im" units="dimensionless" />
+    <variable cmeta:id="main.C" initial_value="10" name="C" units="J_per_m2" />
+    <variable cmeta:id="main.q" initial_value="0" name="q" units="metre" />
+    <variable cmeta:id="main.K" initial_value="1" name="K" units="dimensionless" />
+    <variable cmeta:id="main.Bl" initial_value="1" name="Bl" units="Js_per_C_m" />
+  </component>
+  <rdf:RDF xmlns:bqmodel="http://biomodels.net/model-qualifiers/" xmlns:bqbiol="http://biomodels.net/biology-qualifiers/" xmlns:ro="http://www.obofoundry.org/ro/ro.owl#" xmlns:opb="http://bhi.washington.edu/OPB#">
+    <rdf:Description rdf:about="#main.Im" dcterms:description="rotor">
+      <semsim:isComputationalComponentFor>
+        <rdf:Description rdf:about="#property_1">
+          <semsim:hasPhysicalDefinition rdf:resource="https://identifiers.org/opb/OPB_01226" />
+        </rdf:Description>
+      </semsim:isComputationalComponentFor>
+    </rdf:Description>
+    <rdf:Description rdf:about="#main.Bl" dcterms:description="gyrator">
+      <semsim:isComputationalComponentFor>
+        <rdf:Description rdf:about="#property_5">
+          <semsim:hasPhysicalDefinition rdf:resource="https://identifiers.org/opb/OPB_01108" />
+        </rdf:Description>
+      </semsim:isComputationalComponentFor>
+    </rdf:Description>
+    <rdf:Description rdf:about="#main.q" dcterms:description="rotor">
+      <semsim:isComputationalComponentFor>
+        <rdf:Description rdf:about="#property_3">
+          <semsim:hasPhysicalDefinition rdf:resource="https://identifiers.org/opb/OPB_01495" />
+        </rdf:Description>
+      </semsim:isComputationalComponentFor>
+    </rdf:Description>
+    <rdf:Description rdf:about="#main.K" dcterms:description="transformer">
+      <semsim:isComputationalComponentFor>
+        <rdf:Description rdf:about="#property_4">
+          <semsim:hasPhysicalDefinition rdf:resource="https://identifiers.org/opb/OPB_01108" />
+        </rdf:Description>
+      </semsim:isComputationalComponentFor>
+    </rdf:Description>
+    <rdf:Description rdf:about="#metaid0" semsim:modelName="Rotor">
+      <semsim:modelName>rotor</semsim:modelName>
+    </rdf:Description>
+    <rdf:Description rdf:about="#main.Rm" dcterms:description="rotor">
+      <semsim:isComputationalComponentFor>
+        <rdf:Description rdf:about="#property_0">
+          <semsim:hasPhysicalDefinition rdf:resource="https://identifiers.org/opb/OPB_00183" />
+        </rdf:Description>
+      </semsim:isComputationalComponentFor>
+    </rdf:Description>
+    <rdf:Description rdf:about="#main.C" dcterms:description="rotor">
+      <semsim:isComputationalComponentFor>
+        <rdf:Description rdf:about="#property_2">
+          <semsim:hasPhysicalDefinition rdf:resource="https://identifiers.org/opb/OPB_00081" />
+        </rdf:Description>
+      </semsim:isComputationalComponentFor>
+    </rdf:Description>
+  </rdf:RDF>
+</model>
+

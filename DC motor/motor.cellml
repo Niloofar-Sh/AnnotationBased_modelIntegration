@@ -1,0 +1,77 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<model cmeta:id="metaid0" name="motor" xmlns="http://www.cellml.org/cellml/1.1#" xmlns:cellml="http://www.cellml.org/cellml/1.1#" xmlns:cmeta="http://www.cellml.org/metadata/1.0#">
+    <units name="Js_per_C">
+        <unit units="joule"/>
+        <unit units="second"/>
+        <unit exponent="-1.0" units="coulomb"/>
+    </units>
+    <units name="C_per_s">
+        <unit exponent="-1.0" units="second"/>
+        <unit units="coulomb"/>
+    </units>
+    <units name="C_per_s2">
+        <unit exponent="-2.0" units="second"/>
+        <unit units="coulomb"/>
+    </units>
+    <units name="Js_per_C_m">
+        <unit units="joule"/>
+        <unit units="second"/>
+        <unit exponent="-1.0" units="metre"/>
+        <unit exponent="-1.0" units="coulomb"/>
+    </units>
+    <units name="J_per_C">
+        <unit exponent="-1.0" units="coulomb"/>
+        <unit units="joule"/>
+    </units>
+    <units name="Js_per_C2">
+        <unit units="second"/>
+        <unit exponent="-2.0" units="coulomb"/>
+        <unit units="joule"/>
+    </units>
+    <units name="C2_per_J">
+        <unit exponent="2.0" units="coulomb"/>
+        <unit exponent="-1.0" units="joule"/>
+    </units>
+    <units name="Js2_per_C2">
+        <unit exponent="2.0" units="second"/>
+        <unit units="joule"/>
+        <unit exponent="-2.0" units="coulomb"/>
+    </units>
+    <component name="main">
+        <variable cmeta:id="main.Rf" initial_value="5.495" name="Rf" units="Js_per_C2"/>
+        <variable cmeta:id="main.Ra" initial_value="0.875" name="Ra" units="Js_per_C2"/>
+        <variable cmeta:id="main.Ia" initial_value="0.175" name="Ia" units="Js2_per_C2"/>
+        <variable cmeta:id="main.Bl" initial_value="10" name="Bl" units="Js_per_C_m"/>
+    </component>
+    <rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+        <rdf:Description xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" dcterms:description="input" rdf:about="#main.Rf" xmlns:dcterms="http://purl.org/dc/terms/">
+            <semsim:isComputationalComponentFor xmlns:semsim="http://www.bhi.washington.edu/SemSim#">
+                <rdf:Description xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" rdf:about="#property_0">
+                    <semsim:hasPhysicalDefinition xmlns:semsim="http://www.bhi.washington.edu/SemSim#" rdf:resource="https://identifiers.org/opb/OPB_00151" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"/>
+                </rdf:Description>
+            </semsim:isComputationalComponentFor>
+        </rdf:Description>
+        <rdf:Description xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" dcterms:description="motor" rdf:about="#main.Ra" xmlns:dcterms="http://purl.org/dc/terms/">
+            <semsim:isComputationalComponentFor xmlns:semsim="http://www.bhi.washington.edu/SemSim#">
+                <rdf:Description xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" rdf:about="#property_1">
+                    <semsim:hasPhysicalDefinition xmlns:semsim="http://www.bhi.washington.edu/SemSim#" rdf:resource="https://identifiers.org/opb/OPB_00151" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"/>
+                </rdf:Description>
+            </semsim:isComputationalComponentFor>
+        </rdf:Description>
+        <rdf:Description xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" rdf:about="#metaid0" semsim:modelName="motor" xmlns:semsim="http://www.bhi.washington.edu/SemSim#"/>
+        <rdf:Description xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" dcterms:description="gyrator" rdf:about="#main.Bl" xmlns:dcterms="http://purl.org/dc/terms/">
+            <semsim:isComputationalComponentFor xmlns:semsim="http://www.bhi.washington.edu/SemSim#">
+                <rdf:Description xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" rdf:about="#property_3">
+                    <semsim:hasPhysicalDefinition xmlns:semsim="http://www.bhi.washington.edu/SemSim#" rdf:resource="https://identifiers.org/opb/OPB_01108" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"/>
+                </rdf:Description>
+            </semsim:isComputationalComponentFor>
+        </rdf:Description>
+        <rdf:Description xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" dcterms:description="motor" rdf:about="#main.Ia" xmlns:dcterms="http://purl.org/dc/terms/">
+            <semsim:isComputationalComponentFor xmlns:semsim="http://www.bhi.washington.edu/SemSim#">
+                <rdf:Description xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" rdf:about="#property_2">
+                    <semsim:hasPhysicalDefinition xmlns:semsim="http://www.bhi.washington.edu/SemSim#" rdf:resource="https://identifiers.org/opb/OPB_01521" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"/>
+                </rdf:Description>
+            </semsim:isComputationalComponentFor>
+        </rdf:Description>
+    </rdf:RDF>
+</model>
